@@ -46,10 +46,10 @@
       <key>CFBundleTypeRole</key>
       <string>Editor</string>
       <key>CFBundleURLName</key>
-      <string>org.yupostproject.YuPostPayment</string>
+      <string>org.yupost.YuPostPayment</string>
       <key>CFBundleURLSchemes</key>
       <array>
-        <string>yupostproject</string>
+        <string>yupost</string>
       </array>
     </dict>
   </array>
