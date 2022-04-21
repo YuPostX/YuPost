@@ -64,7 +64,7 @@
               </font>
              </property>
              <property name="text">
-              <string>Create Smart Contract</string>
+              <string>   Contract details</string>
              </property>
             </widget>
            </item>
@@ -173,7 +173,7 @@
                    </size>
                   </property>
                   <property name="text">
-                   <string>Interface (ABI)</string>
+                   <string>Message</string>
                   </property>
                  </widget>
                 </item>
@@ -196,7 +196,11 @@
                    </size>
                   </property>
                   <property name="text">
-                   <string>Bytecode</string>
+                   <string>Pickup address and time:
+Delivery address and time:
+Package size and weight:
+Pay: 
+</string>
                   </property>
                  </widget>
                 </item>
@@ -227,7 +231,7 @@
          <item>
           <widget class="QGroupBox" name="groupBoxConstructor">
            <property name="title">
-            <string>Constructor</string>
+            <string>   Generated three-way keys and QR code</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <property name="leftMargin">
@@ -247,7 +251,7 @@
                  <x>0</x>
                  <y>0</y>
                  <width>656</width>
-                 <height>133</height>
+                 <height>111</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_5"/>
@@ -277,7 +281,7 @@
          <item>
           <widget class="QGroupBox" name="groupBoxOptional">
            <property name="title">
-            <string>Optional</string>
+            <string>   Optional</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_2">
             <property name="leftMargin">

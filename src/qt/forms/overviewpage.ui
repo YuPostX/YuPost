@@ -1151,7 +1151,7 @@
   <customwidget>
    <class>YuPostPushButton</class>
    <extends>QPushButton</extends>
-   <header>qt/yupostprojectpushbutton.h</header>
+   <header>qt/yupostpushbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

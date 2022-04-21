@@ -68,7 +68,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Call Smart Contract</string>
+            <string>   Delivery contracts</string>
            </property>
           </widget>
          </item>
@@ -221,7 +221,7 @@
                    </size>
                   </property>
                   <property name="text">
-                   <string>Interface (ABI)</string>
+                   <string>Available deliveries</string>
                   </property>
                  </widget>
                 </item>
@@ -238,7 +238,10 @@
                    </size>
                   </property>
                   <property name="text">
-                   <string>Contract Address</string>
+                   <string>Filter by:
+Date and time
+Location
+Pay</string>
                   </property>
                  </widget>
                 </item>
@@ -275,7 +278,7 @@
          <item>
           <widget class="QGroupBox" name="groupBoxFunction">
            <property name="title">
-            <string>Function</string>
+            <string>    Delivery details</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <property name="leftMargin">
@@ -295,7 +298,7 @@
                  <x>0</x>
                  <y>0</y>
                  <width>640</width>
-                 <height>116</height>
+                 <height>77</height>
                 </rect>
                </property>
               </widget>
@@ -330,7 +333,7 @@
          <item>
           <widget class="QGroupBox" name="groupBoxOptional">
            <property name="title">
-            <string>Optional</string>
+            <string>   Optional</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_3">
             <property name="leftMargin">
@@ -439,7 +442,7 @@
      <item>
       <widget class="QPushButton" name="pushButtonCallContract">
        <property name="text">
-        <string>Call Contract</string>
+        <string>Accept Contract</string>
        </property>
       </widget>
      </item>

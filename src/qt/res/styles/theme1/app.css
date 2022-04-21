@@ -8,17 +8,17 @@ QWidget{
 Main Window CSS
 --------------------------------------------*/
 QMainWindow{
-    background-color: #1f1f1f;
-    border: 0px solid transparent;
+    background-color: #000000;
+    border: 0px so0lid transparent;
     background-image: url(":/styles/theme1/app-icons/bg");
     background-position: bottom left;
     background-repeat: no-repeat;
 }
 QMainWindow .QFrame{
-    border: 1px solid transparent;
+    border: 0px solid transparent;
 }
 QDialog .QFrame{
-    border: 1px solid transparent;
+    border: 0px solid transparent;
 }
 QMainWindow::separator {
     width: 0px;
@@ -40,15 +40,15 @@ QFrame#hLine,
 #hLine2,
 #hLine3,
 #hLine4{
-    border-top: 1px solid #404041;
+    border-top: 0px solid #404041;
 }
 QFrame#hContractLine,
 #hContractLine2{
-    border-top: 1px solid transparent;
+    border-top: 0px solid transparent;
 }
 QFrame#vLine,
 #vLine2{
-    border-left: 1px solid #404041;
+    border-left: 0px solid #404041;
 }
 WalletFrame{
     background-color: #272727;
@@ -81,7 +81,7 @@ NavigationBar #labelLogo{
 }
 NavigationBar #hLineLogo,
 NavigationBar #hLineStatus{
-    border-top: 1px solid rgba(255, 255, 255, 10%);
+    border-top: 0px solid rgba(255, 255, 255, 10%);
 }
 /*-------------------------------------------- 
 Line Edit CSS
