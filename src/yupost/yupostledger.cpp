@@ -1,4 +1,4 @@
-#include <yupostproject/yupostprojectledger.h>
+#include <yupost/yupostledger.h>
 #include <util/system.h>
 #include <chainparams.h>
 #include <univalue.h>
@@ -93,7 +93,7 @@ bool isPyPath(const std::string& str)
 }
 #endif
 
-// Start process from yupostprojectd
+// Start process from yupostd
 class CProcess
 {
 public:

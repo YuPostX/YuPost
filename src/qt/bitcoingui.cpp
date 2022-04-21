@@ -21,7 +21,7 @@
 #include <rpc/server.h>
 #include <qt/navigationbar.h>
 #include <qt/titlebar.h>
-#include <qt/yupostprojectversionchecker.h>
+#include <qt/yupostversionchecker.h>
 #include <qt/styleSheet.h>
 
 #ifdef ENABLE_WALLET
@@ -246,7 +246,7 @@ BitcoinGUI::BitcoinGUI(interfaces::Node& node, const PlatformStyle *_platformSty
     });
 
     modalOverlay = new ModalOverlay(enableWallet, this);
-    yupostprojectVersionChecker = new YuPostVersionChecker(this);
+    yupostVersionChecker = new YuPostVersionChecker(this);
     connect(labelBlocksIcon, &GUIUtil::ClickableLabel::clicked, this, &BitcoinGUI::showModalOverlay);
     connect(progressBar, &GUIUtil::ClickableProgressBar::clicked, this, &BitcoinGUI::showModalOverlay);
 #ifdef ENABLE_WALLET
@@ -293,12 +293,23 @@ BitcoinGUI::~BitcoinGUI()
 void BitcoinGUI::createActions()
 {
     QActionGroup *tabGroup = new QActionGroup(this);
+        
+    smartContractAction = new QAction(platformStyle->MultiStatesIcon(":/icons/smart_contract"), tr("Postal &Contracts"), this);
+    smartContractAction->setStatusTip(tr("Post"));
+    smartContractAction->setToolTip(smartContractAction->statusTip());
+    smartContractAction->setCheckable(true);
+    smartContractAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_1));
+    tabGroup->addAction(smartContractAction);
+
+    createContractAction = new QAction(tr("Send"), this);
+    sendToContractAction = new QAction(tr("Recieve"), this);
+    callContractAction = new QAction(tr("Deliver"), this); 
 
     overviewAction = new QAction(platformStyle->MultiStatesIcon(":/icons/overview"), tr("My &wallet"), this);
     overviewAction->setStatusTip(tr("Show general overview of wallet"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
-    overviewAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_1));
+    overviewAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
     tabGroup->addAction(overviewAction);
 
     sendCoinsAction = new QAction(platformStyle->MultiStatesIcon(":/icons/send_to"), tr("&Send"), this);
@@ -312,7 +323,7 @@ void BitcoinGUI::createActions()
     sendCoinsMenuAction->setToolTip(sendCoinsMenuAction->statusTip());
 
     receiveCoinsAction = new QAction(platformStyle->MultiStatesIcon(":/icons/receive_from"), tr("&Receive"), this);
-    receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and yupostproject: URIs)"));
+    receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and yupost: URIs)"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
     tabGroup->addAction(receiveCoinsAction);
@@ -325,19 +336,9 @@ void BitcoinGUI::createActions()
     historyAction->setStatusTip(tr("Browse transaction history"));
     historyAction->setToolTip(historyAction->statusTip());
     historyAction->setCheckable(true);
-    historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
+    historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
     tabGroup->addAction(historyAction);
 
-    smartContractAction = new QAction(platformStyle->MultiStatesIcon(":/icons/smart_contract"), tr("Smart &Contracts"), this);
-    smartContractAction->setStatusTip(tr("Smart contracts"));
-    smartContractAction->setToolTip(smartContractAction->statusTip());
-    smartContractAction->setCheckable(true);
-    smartContractAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
-    tabGroup->addAction(smartContractAction);
-
-    createContractAction = new QAction(tr("Create"), this);
-    sendToContractAction = new QAction(tr("Send To"), this);
-    callContractAction = new QAction(tr("Call"), this);
 
     walletStakeAction = new QAction(platformStyle->MultiStatesIcon(":/icons/tx_mined"), tr("&Stake"), this);
     walletStakeAction->setStatusTip(tr("Show stake of wallet"));
@@ -350,8 +351,8 @@ void BitcoinGUI::createActions()
     delegationAction = new QAction(tr("Delegations"), this);
     superStakerAction = new QAction(tr("Super Staking"), this);
 
-    QRCTokenAction = new QAction(platformStyle->MultiStatesIcon(":/icons/qrctoken"), tr("&QRC Tokens"), this);
-    QRCTokenAction->setStatusTip(tr("QRC Tokens (send, receive or add Tokens in list)"));
+    QRCTokenAction = new QAction(platformStyle->MultiStatesIcon(":/icons/qrctoken"), tr("&Loyalty Tokens"), this);
+    QRCTokenAction->setStatusTip(tr("Loyalty Tokens (send, receive or add Tokens in list)"));
     QRCTokenAction->setToolTip(QRCTokenAction->statusTip());
     QRCTokenAction->setCheckable(true);
     QRCTokenAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
@@ -439,7 +440,7 @@ void BitcoinGUI::createActions()
     usedReceivingAddressesAction->setStatusTip(tr("Show the list of used receiving addresses and labels"));
 
     openAction = new QAction(tr("Open &URI..."), this);
-    openAction->setStatusTip(tr("Open a yupostproject: URI"));
+    openAction->setStatusTip(tr("Open a yupost: URI"));
 
     m_open_wallet_action = new QAction(tr("Open Wallet"), this);
     m_open_wallet_action->setEnabled(false);
@@ -637,13 +638,13 @@ void BitcoinGUI::createToolBars()
         addDockWindows(Qt::LeftDockWidgetArea, appNavigationBar);
 
         // Fill the component with actions
-        appNavigationBar->addAction(overviewAction);
-        appNavigationBar->addAction(historyAction);
-        QList<QAction*> contractActions;
+		QList<QAction*> contractActions;
         contractActions.append(createContractAction);
         contractActions.append(sendToContractAction);
         contractActions.append(callContractAction);
         appNavigationBar->mapGroup(smartContractAction, contractActions);
+        appNavigationBar->addAction(overviewAction);
+        appNavigationBar->addAction(historyAction);
         QList<QAction*> walletStakeActions;
         walletStakeActions.append(stakeAction);
         walletStakeActions.append(delegationAction);
@@ -684,7 +685,7 @@ void BitcoinGUI::setClientModel(ClientModel *_clientModel)
     if(_clientModel)
     {
         // Check for updates
-        if(_clientModel->getOptionsModel()->getCheckForUpdates() && yupostprojectVersionChecker->newVersionAvailable())
+        if(_clientModel->getOptionsModel()->getCheckForUpdates() && yupostVersionChecker->newVersionAvailable())
         {
             QString link = QString("<a href=%1>%2</a>").arg(YPO_RELEASES, YPO_RELEASES);
             QString message(tr("New version of YuPost wallet is available on the YuPost source code repository: <br /> %1. <br />It is recommended to download it and update this application").arg(link));

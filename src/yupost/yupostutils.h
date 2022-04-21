@@ -5,9 +5,9 @@
 #include <libdevcore/FixedHash.h>
 
 /**
- * yupostprojectutils Provides utility functions to EVM for functionalities that already exist in yupostproject
+ * yupostutils Provides utility functions to EVM for functionalities that already exist in yupost
  */
-namespace yupostprojectutils
+namespace yupostutils
 {
 /**
  * @brief btc_ecrecover Wrapper to CPubKey::RecoverCompact

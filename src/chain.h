@@ -182,14 +182,14 @@ public:
     uint32_t nTime{0};
     uint32_t nBits{0};
     uint32_t nNonce{0};
-    uint256 hashStateRoot{}; // yupostproject
-    uint256 hashUTXORoot{}; // yupostproject
+    uint256 hashStateRoot{}; // yupost
+    uint256 hashUTXORoot{}; // yupost
     // block signature - proof-of-stake protect the block by signing the block using a stake holder private key
     std::vector<unsigned char> vchBlockSigDlgt{};
     uint256 nStakeModifier{};
     // proof-of-stake specific fields
     COutPoint prevoutStake{};
-    uint256 hashProof{}; // yupostproject
+    uint256 hashProof{}; // yupost
     uint64_t nMoneySupply{0};
 
     //! (memory only) Sequential id assigned to distinguish order in which blocks are received.
@@ -243,8 +243,8 @@ public:
         block.nTime          = nTime;
         block.nBits          = nBits;
         block.nNonce         = nNonce;
-        block.hashStateRoot  = hashStateRoot; // yupostproject
-        block.hashUTXORoot   = hashUTXORoot; // yupostproject
+        block.hashStateRoot  = hashStateRoot; // yupost
+        block.hashUTXORoot   = hashUTXORoot; // yupost
         block.vchBlockSigDlgt    = vchBlockSigDlgt;
         block.prevoutStake   = prevoutStake;
         return block;
@@ -290,7 +290,7 @@ public:
         return pbegin[(pend - pbegin)/2];
     }
 
-    bool IsProofOfWork() const // yupostproject
+    bool IsProofOfWork() const // yupost
     {
         return !IsProofOfStake();
     }
@@ -386,12 +386,12 @@ public:
         READWRITE(obj.nTime);
         READWRITE(obj.nBits);
         READWRITE(obj.nNonce);
-        READWRITE(obj.hashStateRoot); // yupostproject
-        READWRITE(obj.hashUTXORoot); // yupostproject
+        READWRITE(obj.hashStateRoot); // yupost
+        READWRITE(obj.hashUTXORoot); // yupost
         READWRITE(obj.nStakeModifier);
         READWRITE(obj.prevoutStake);
         READWRITE(obj.hashProof);
-        READWRITE(obj.vchBlockSigDlgt); // yupostproject
+        READWRITE(obj.vchBlockSigDlgt); // yupost
     }
 
     uint256 GetBlockHash() const
@@ -403,8 +403,8 @@ public:
         block.nTime           = nTime;
         block.nBits           = nBits;
         block.nNonce          = nNonce;
-        block.hashStateRoot   = hashStateRoot; // yupostproject
-        block.hashUTXORoot    = hashUTXORoot; // yupostproject
+        block.hashStateRoot   = hashStateRoot; // yupost
+        block.hashUTXORoot    = hashUTXORoot; // yupost
         block.vchBlockSigDlgt     = vchBlockSigDlgt;
         block.prevoutStake    = prevoutStake;
         return block.GetHash();

@@ -1,4 +1,4 @@
-#include <yupostproject/yupostprojectDGP.h>
+#include <yupost/yupostDGP.h>
 #include <chainparams.h>
 
 std::vector<uint32_t> createDataSchedule(const dev::eth::EVMSchedule& schedule)

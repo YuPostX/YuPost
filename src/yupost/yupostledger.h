@@ -23,7 +23,7 @@ struct LedgerDevice
 };
 
 /**
- * @brief The YuPostLedger class Communicate with the yupostproject ledger
+ * @brief The YuPostLedger class Communicate with the yupost ledger
  */
 class YuPostLedger {
     

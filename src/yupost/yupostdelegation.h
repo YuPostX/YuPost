@@ -86,7 +86,7 @@ public:
 };
 
 /**
- * @brief The YuPostDelegation class Communicate with the yupostproject delegation contract
+ * @brief The YuPostDelegation class Communicate with the yupost delegation contract
  */
 class YuPostDelegation {
     

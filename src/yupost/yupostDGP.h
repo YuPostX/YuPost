@@ -1,7 +1,7 @@
 #ifndef YPODGP_H
 #define YPODGP_H
 
-#include <yupostproject/yupostprojectstate.h>
+#include <yupost/yupoststate.h>
 #include <primitives/block.h>
 #include <validation.h>
 #include <util/strencodings.h>

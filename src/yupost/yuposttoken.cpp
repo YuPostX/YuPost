@@ -1,4 +1,4 @@
-﻿#include <yupostproject/yupostprojecttoken.h>
+﻿#include <yupost/yuposttoken.h>
 #include <validation.h>
 #include <util/moneystr.h>
 #include <util/contractabi.h>
@@ -96,10 +96,10 @@ struct YuPostTokenData
 
 bool YuPostToken::ToHash160(const std::string& strYuPostAddress, std::string& strHash160)
 {
-    CTxDestination yupostprojectAddress = DecodeDestination(strYuPostAddress);
-    if(!IsValidDestination(yupostprojectAddress))
+    CTxDestination yupostAddress = DecodeDestination(strYuPostAddress);
+    if(!IsValidDestination(yupostAddress))
         return false;
-    const PKHash * keyid = boost::get<PKHash>(&yupostprojectAddress);
+    const PKHash * keyid = boost::get<PKHash>(&yupostAddress);
     if(keyid){
         strHash160 = HexStr(valtype(keyid->begin(),keyid->end()));
     }else{
@@ -112,9 +112,9 @@ bool YuPostToken::ToYuPostAddress(const std::string& strHash160, std::string& st
 {
     uint160 key(ParseHex(strHash160.c_str()));
     PKHash keyid(key);
-    CTxDestination yupostprojectAddress = keyid;
-    if(IsValidDestination(yupostprojectAddress)){
-        strYuPostAddress = EncodeDestination(yupostprojectAddress);
+    CTxDestination yupostAddress = keyid;
+    if(IsValidDestination(yupostAddress)){
+        strYuPostAddress = EncodeDestination(yupostAddress);
         return true;
     }
     return false;

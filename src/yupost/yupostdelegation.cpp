@@ -1,4 +1,4 @@
-#include <yupostproject/yupostprojectdelegation.h>
+#include <yupost/yupostdelegation.h>
 #include <chainparams.h>
 #include <util/contractabi.h>
 #include <util/convert.h>

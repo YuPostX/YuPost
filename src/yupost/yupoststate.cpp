@@ -3,7 +3,7 @@
 #include <validation.h>
 #include <chainparams.h>
 #include <script/script.h>
-#include <yupostproject/yupostprojectstate.h>
+#include <yupost/yupoststate.h>
 #include <libevm/VMFace.h>
 
 using namespace std;
@@ -12,7 +12,7 @@ using namespace dev::eth;
 
 YuPostState::YuPostState(u256 const& _accountStartNonce, OverlayDB const& _db, const string& _path, BaseState _bs) :
         State(_accountStartNonce, _db, _bs) {
-            dbUTXO = YuPostState::openDB(_path + "/yupostprojectDB", sha3(rlp("")), WithExisting::Trust);
+            dbUTXO = YuPostState::openDB(_path + "/yupostDB", sha3(rlp("")), WithExisting::Trust);
 	        stateUTXO = SecureTrieDB<Address, OverlayDB>(&dbUTXO);
 }
 
@@ -84,7 +84,7 @@ ResultExecute YuPostState::execute(EnvInfo const& _envInfo, SealEngineFace const
                 printfErrorLog(res.excepted);
             }
 
-            yupostproject::commit(cacheUTXO, stateUTXO, m_cache);
+            yupost::commit(cacheUTXO, stateUTXO, m_cache);
             cacheUTXO.clear();
             bool removeEmptyAccounts = _envInfo.number() >= _sealEngine.chainParams().EIP158ForkBlock;
             commit(removeEmptyAccounts ? State::CommitBehaviour::RemoveEmptyAccounts : State::CommitBehaviour::KeepEmptyAccounts);
@@ -180,7 +180,7 @@ Vin* YuPostState::vin(dev::Address const& _addr)
 //     if (_commitBehaviour == CommitBehaviour::RemoveEmptyAccounts)
 //         removeEmptyAccounts();
 
-//     yupostproject::commit(cacheUTXO, stateUTXO, m_cache);
+//     yupost::commit(cacheUTXO, stateUTXO, m_cache);
 //     cacheUTXO.clear();
         
 //     m_touched += dev::eth::commit(m_cache, m_state);

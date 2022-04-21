@@ -1,11 +1,11 @@
-#include <yupostproject/yupostprojectutils.h>
+#include <yupost/yupostutils.h>
 #include <libdevcore/CommonData.h>
 #include <pubkey.h>
 #include <util/convert.h>
 
 using namespace dev;
 
-bool yupostprojectutils::btc_ecrecover(const dev::h256 &hash, const dev::u256 &v, const dev::h256 &r, const dev::h256 &s, dev::h256 &key)
+bool yupostutils::btc_ecrecover(const dev::h256 &hash, const dev::u256 &v, const dev::h256 &r, const dev::h256 &s, dev::h256 &key)
 {
     // Check input parameters
     if(v >= 256)
