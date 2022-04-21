@@ -1,12 +1,12 @@
-#ifndef QTUMHWITOOL_H
-#define QTUMHWITOOL_H
+#ifndef YPOHWITOOL_H
+#define YPOHWITOOL_H
 
 #include <QObject>
 #include <QString>
 #include <QStringList>
 #include <QList>
 #include <QVariantMap>
-class QtumHwiToolPriv;
+class YuPostHwiToolPriv;
 class InstallDevicePriv;
 class WalletModel;
 class ExecRPCCommand;
@@ -52,22 +52,22 @@ public:
 };
 
 /**
- * @brief The QtumHwiTool class Communicate with the Qtum Hardware Wallet Interface Tool
+ * @brief The YuPostHwiTool class Communicate with the YuPost Hardware Wallet Interface Tool
  */
-class QtumHwiTool : public QObject
+class YuPostHwiTool : public QObject
 {
     Q_OBJECT
 public:
     /**
-     * @brief QtumHwiTool Constructor
+     * @brief YuPostHwiTool Constructor
      * @param parent Parent object
      */
-    explicit QtumHwiTool(QObject *parent = nullptr);
+    explicit YuPostHwiTool(QObject *parent = nullptr);
 
     /**
-     * @brief ~QtumHwiTool Destructor
+     * @brief ~YuPostHwiTool Destructor
      */
-    ~QtumHwiTool();
+    ~YuPostHwiTool();
 
     /**
      * @brief enumerate Enumerate hardware wallet devices
@@ -250,7 +250,7 @@ private:
     bool execRPC(ExecRPCCommand* cmd, const QMap<QString, QString>& lstParams, QVariant& result, QString& resultJson);
     void addError(const QString& error);
 
-    QtumHwiToolPriv* d;
+    YuPostHwiToolPriv* d;
 };
 
-#endif // QTUMHWITOOL_H
+#endif // YPOHWITOOL_H

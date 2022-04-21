@@ -1,8 +1,8 @@
 #include <boost/test/unit_test.hpp>
-#include <qtumtests/test_utils.h>
+#include <yupostprojecttests/test_utils.h>
 #include <script/standard.h>
 #include <chainparams.h>
-#include <qtum/qtumdelegation.h>
+#include <yupostproject/yupostprojectdelegation.h>
 
 namespace DelegationTest{
 
@@ -42,13 +42,13 @@ BOOST_FIXTURE_TEST_SUITE(delegations_tests, TestChain100Setup)
 
 BOOST_AUTO_TEST_CASE(checking_remove_bytecode_delegation){
     // Check remove delegation bytecode
-    BOOST_CHECK(QtumDelegation::BytecodeRemove() == REMOVE_BYTECODE_HEX);
+    BOOST_CHECK(YuPostDelegation::BytecodeRemove() == REMOVE_BYTECODE_HEX);
 }
 
 BOOST_AUTO_TEST_CASE(checking_add_bytecode_delegation){
     // Check add delegation bytecode
     std::string datahex, errorMessage;
-    bool result = QtumDelegation::BytecodeAdd(STAKER_ADDRESS_HEX, STAKER_FEE, ParseHex(POD_HEX), datahex, errorMessage);
+    bool result = YuPostDelegation::BytecodeAdd(STAKER_ADDRESS_HEX, STAKER_FEE, ParseHex(POD_HEX), datahex, errorMessage);
     BOOST_CHECK(result == true);
     BOOST_CHECK(errorMessage == "");
     BOOST_CHECK(datahex == ADD_BYTECODE_HEX);
@@ -61,9 +61,9 @@ BOOST_AUTO_TEST_CASE(checking_verify_delegation){
     delegation.staker = uint160(ParseHex(STAKER_ADDRESS_HEX));
     delegation.fee = STAKER_FEE;
     delegation.PoD = ParseHex(POD_HEX);
-    BOOST_CHECK(QtumDelegation::VerifyDelegation(address, delegation) == true);
+    BOOST_CHECK(YuPostDelegation::VerifyDelegation(address, delegation) == true);
     delegation.PoD[0] = 20;
-    BOOST_CHECK(QtumDelegation::VerifyDelegation(address, delegation) == false);
+    BOOST_CHECK(YuPostDelegation::VerifyDelegation(address, delegation) == false);
 }
 
 BOOST_AUTO_TEST_CASE(checking_delegations_from_events){
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE(checking_delegations_from_events){
     events.push_back(event);
 
     // Get delegations from events
-    std::map<uint160, Delegation> delegations = QtumDelegation::DelegationsFromEvents(events);
+    std::map<uint160, Delegation> delegations = YuPostDelegation::DelegationsFromEvents(events);
     BOOST_CHECK(delegations.size() == 1);
     Delegation delegation = delegations[event.item.delegate];
     BOOST_CHECK(delegation.staker == event.item.staker);
@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE(checking_delegations_from_events){
     events.clear();
     event.type = DELEGATION_REMOVE;
     events.push_back(event);
-    QtumDelegation::UpdateDelegationsFromEvents(events, delegations);
+    YuPostDelegation::UpdateDelegationsFromEvents(events, delegations);
     BOOST_CHECK(delegations.size() == 0);
 }
 
@@ -108,19 +108,19 @@ BOOST_AUTO_TEST_CASE(checking_delegations_contract){
     dev::h256 hashTx(HASHTX);
 
     // Create contracts
-    std::vector<QtumTransaction> txs;
-    txs.push_back(createQtumTransaction(DELEGATION_CODE, 0, GASLIMIT, dev::u256(1), hashTx, dev::Address()));
+    std::vector<YuPostTransaction> txs;
+    txs.push_back(createYuPostTransaction(DELEGATION_CODE, 0, GASLIMIT, dev::u256(1), hashTx, dev::Address()));
     executeBC(txs);
 
     // Set delegation contract address
-    dev::Address contractAddress = createQtumAddress(txs[0].getHashWith(), txs[0].getNVout());
+    dev::Address contractAddress = createYuPostAddress(txs[0].getHashWith(), txs[0].getNVout());
     UpdateDelegationsAddress(h160Touint(contractAddress));
-    QtumDelegation qtumDelegation;
-    BOOST_CHECK(qtumDelegation.ExistDelegationContract() == true);
+    YuPostDelegation yupostprojectDelegation;
+    BOOST_CHECK(yupostprojectDelegation.ExistDelegationContract() == true);
 
     // Call add delegation
-    std::vector<QtumTransaction> txsAdd;
-    QtumTransaction txAdd = createQtumTransaction(ParseHex(ADD_BYTECODE_HEX), 0, GASLIMIT, dev::u256(1), ++hashTx, contractAddress);
+    std::vector<YuPostTransaction> txsAdd;
+    YuPostTransaction txAdd = createYuPostTransaction(ParseHex(ADD_BYTECODE_HEX), 0, GASLIMIT, dev::u256(1), ++hashTx, contractAddress);
     txAdd.forceSender(dev::Address(DELEGATE_ADDRESS_HEX));
     txsAdd.push_back(txAdd);
     executeBC(txsAdd);
@@ -128,29 +128,29 @@ BOOST_AUTO_TEST_CASE(checking_delegations_contract){
     // Get delegation for address
     Delegation delegation;
     uint160 address(ParseHex(DELEGATE_ADDRESS_HEX));
-    bool contractRet = qtumDelegation.GetDelegation(address, delegation);
+    bool contractRet = yupostprojectDelegation.GetDelegation(address, delegation);
     BOOST_CHECK(contractRet == true);
 
     // Verify delegation is valid
-    BOOST_CHECK(QtumDelegation::VerifyDelegation(address, delegation) == true);
+    BOOST_CHECK(YuPostDelegation::VerifyDelegation(address, delegation) == true);
 
     // Check staker fee
     BOOST_CHECK(delegation.fee == STAKER_FEE);
 
     // Call remove delegation
-    std::vector<QtumTransaction> txsRemove;
-    QtumTransaction txRemove = createQtumTransaction(ParseHex(REMOVE_BYTECODE_HEX), 0, GASLIMIT, dev::u256(1), ++hashTx, contractAddress);
+    std::vector<YuPostTransaction> txsRemove;
+    YuPostTransaction txRemove = createYuPostTransaction(ParseHex(REMOVE_BYTECODE_HEX), 0, GASLIMIT, dev::u256(1), ++hashTx, contractAddress);
     txRemove.forceSender(dev::Address(DELEGATE_ADDRESS_HEX));
     txsRemove.push_back(txRemove);
     executeBC(txsRemove);
 
     // Get delegation for address
     delegation = Delegation();
-    contractRet = qtumDelegation.GetDelegation(address, delegation);
+    contractRet = yupostprojectDelegation.GetDelegation(address, delegation);
     BOOST_CHECK(contractRet == true);
 
     // Verify delegation is valid
-    BOOST_CHECK(QtumDelegation::VerifyDelegation(address, delegation) == false);
+    BOOST_CHECK(YuPostDelegation::VerifyDelegation(address, delegation) == false);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

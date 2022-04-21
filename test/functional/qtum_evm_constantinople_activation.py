@@ -5,9 +5,9 @@ from test_framework.util import *
 from test_framework.script import *
 from test_framework.mininode import *
 from test_framework.address import *
-from test_framework.qtum import *
+from test_framework.yupostproject import *
 
-class QtumEVMConstantinopleActivationTest(BitcoinTestFramework):
+class YuPostEVMConstantinopleActivationTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1
@@ -38,4 +38,4 @@ class QtumEVMConstantinopleActivationTest(BitcoinTestFramework):
             self.node.generate(1)
 
 if __name__ == '__main__':
-    QtumEVMConstantinopleActivationTest().main()
+    YuPostEVMConstantinopleActivationTest().main()

@@ -5,12 +5,12 @@ from test_framework.util import *
 from test_framework.script import *
 from test_framework.mininode import *
 from test_framework.address import *
-from test_framework.qtum import *
+from test_framework.yupostproject import *
 import sys
 import random
 import time
 
-class QtumIgnoreMPOSParticipantRewardTest(BitcoinTestFramework):
+class YuPostIgnoreMPOSParticipantRewardTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1
@@ -94,4 +94,4 @@ class QtumIgnoreMPOSParticipantRewardTest(BitcoinTestFramework):
         assert_equal(self.node.getblockcount(), blockcount)
         
 if __name__ == '__main__':
-    QtumIgnoreMPOSParticipantRewardTest().main()
+    YuPostIgnoreMPOSParticipantRewardTest().main()

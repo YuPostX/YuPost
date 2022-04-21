@@ -11,11 +11,11 @@ from test_framework.blocktools import *
 from test_framework.messages import *
 from test_framework.mininode import *
 from test_framework.script import *
-from test_framework.qtum import *
+from test_framework.yupostproject import *
 
 
 
-class QtumBitcoreTest(BitcoinTestFramework):
+class YuPostBitcoreTest(BitcoinTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
         self.extra_args = [['-addrindex=1'], ['-addrindex=0']]
@@ -103,4 +103,4 @@ class QtumBitcoreTest(BitcoinTestFramework):
 
 
 if __name__ == '__main__':
-    QtumBitcoreTest().main()
+    YuPostBitcoreTest().main()

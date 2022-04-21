@@ -2,13 +2,13 @@
 #include <config/bitcoin-config.h>
 #endif
 
-#include <qt/qtumhwitool.h>
+#include <qt/yupostprojecthwitool.h>
 #include <qt/guiutil.h>
 #include <qt/execrpccommand.h>
 #include <qt/walletmodel.h>
 #include <util/strencodings.h>
 #include <util/system.h>
-#include <qtum/qtumledger.h>
+#include <yupostproject/yupostprojectledger.h>
 #include <chainparams.h>
 #include <outputtype.h>
 
@@ -36,10 +36,10 @@ static const QString RC_PATH_FORMAT = ":/ledger";
 static const int ADDRESS_FROM = 0;
 static const int ADDRESS_TO = 1000;
 
-class QtumHwiToolPriv
+class YuPostHwiToolPriv
 {
 public:
-    QtumHwiToolPriv(QObject *parent)
+    YuPostHwiToolPriv(QObject *parent)
     {
         QStringList optionalRescan = QStringList() << PARAM_START_HEIGHT << PARAM_STOP_HEIGHT;
         cmdRescan = new ExecRPCCommand("rescanblockchain", QStringList(), optionalRescan,  QMap<QString, QString>(), parent);
@@ -100,22 +100,22 @@ HWDevice toHWDevice(const LedgerDevice& device)
     return hwDevice;
 }
 
-QtumHwiTool::QtumHwiTool(QObject *parent) : QObject(parent)
+YuPostHwiTool::YuPostHwiTool(QObject *parent) : QObject(parent)
 {
-    d = new QtumHwiToolPriv(this);
+    d = new YuPostHwiToolPriv(this);
 }
 
-QtumHwiTool::~QtumHwiTool()
+YuPostHwiTool::~YuPostHwiTool()
 {
     delete d;
 }
 
-bool QtumHwiTool::enumerate(QList<HWDevice> &devices, bool stake)
+bool YuPostHwiTool::enumerate(QList<HWDevice> &devices, bool stake)
 {
     LOCK(cs_ledger);
     devices.clear();
     std::vector<LedgerDevice> vecDevices;
-    if(QtumLedger::instance().enumerate(vecDevices, stake))
+    if(YuPostLedger::instance().enumerate(vecDevices, stake))
     {
         for(LedgerDevice device : vecDevices)
         {
@@ -130,22 +130,22 @@ bool QtumHwiTool::enumerate(QList<HWDevice> &devices, bool stake)
     }
     else
     {
-        d->strError = QString::fromStdString(QtumLedger::instance().errorMessage());
+        d->strError = QString::fromStdString(YuPostLedger::instance().errorMessage());
     }
 
     return devices.size() > 0;
 }
 
-bool QtumHwiTool::isConnected(const QString &fingerprint, bool stake)
+bool YuPostHwiTool::isConnected(const QString &fingerprint, bool stake)
 {
     LOCK(cs_ledger);
     std::string strFingerprint = fingerprint.toStdString();
-    bool ret = QtumLedger::instance().isConnected(strFingerprint, stake);
-    if(!ret) d->strError = QString::fromStdString(QtumLedger::instance().errorMessage());
+    bool ret = YuPostLedger::instance().isConnected(strFingerprint, stake);
+    if(!ret) d->strError = QString::fromStdString(YuPostLedger::instance().errorMessage());
     return ret;
 }
 
-bool QtumHwiTool::getKeyPool(const QString &fingerprint, int type, const QString& path, bool internal, QString &desc)
+bool YuPostHwiTool::getKeyPool(const QString &fingerprint, int type, const QString& path, bool internal, QString &desc)
 {
     LOCK(cs_ledger);
     std::string strFingerprint = fingerprint.toStdString();
@@ -155,7 +155,7 @@ bool QtumHwiTool::getKeyPool(const QString &fingerprint, int type, const QString
     {
         strPath += internal ? "/1/*" : "/0/*";
     }
-    bool ret = QtumLedger::instance().getKeyPool(strFingerprint, type, strPath, internal, d->from, d->to, strDesc);
+    bool ret = YuPostLedger::instance().getKeyPool(strFingerprint, type, strPath, internal, d->from, d->to, strDesc);
     desc = QString::fromStdString(strDesc);
     if(ret)
     {
@@ -163,12 +163,12 @@ bool QtumHwiTool::getKeyPool(const QString &fingerprint, int type, const QString
     }
     else
     {
-        d->strError = QString::fromStdString(QtumLedger::instance().errorMessage());
+        d->strError = QString::fromStdString(YuPostLedger::instance().errorMessage());
     }
     return ret;
 }
 
-bool QtumHwiTool::getKeyPool(const QString &fingerprint, int type, const QString &path, QStringList &descs)
+bool YuPostHwiTool::getKeyPool(const QString &fingerprint, int type, const QString &path, QStringList &descs)
 {
     LOCK(cs_ledger);
     bool ret = true;
@@ -186,46 +186,46 @@ bool QtumHwiTool::getKeyPool(const QString &fingerprint, int type, const QString
     return ret;
 }
 
-bool QtumHwiTool::getKeyPoolPKH(const QString &fingerprint, const QString& path, QStringList &descs)
+bool YuPostHwiTool::getKeyPoolPKH(const QString &fingerprint, const QString& path, QStringList &descs)
 {
     return getKeyPool(fingerprint, (int)OutputType::LEGACY, path, descs);
 }
 
-bool QtumHwiTool::getKeyPoolP2SH(const QString &fingerprint, const QString& path, QStringList &descs)
+bool YuPostHwiTool::getKeyPoolP2SH(const QString &fingerprint, const QString& path, QStringList &descs)
 {
     return getKeyPool(fingerprint, (int)OutputType::P2SH_SEGWIT, path, descs);
 }
 
-bool QtumHwiTool::getKeyPoolBech32(const QString &fingerprint, const QString& path, QStringList &descs)
+bool YuPostHwiTool::getKeyPoolBech32(const QString &fingerprint, const QString& path, QStringList &descs)
 {
     return getKeyPool(fingerprint, (int)OutputType::BECH32, path, descs);
 }
 
-bool QtumHwiTool::signTx(const QString &fingerprint, QString &psbt)
+bool YuPostHwiTool::signTx(const QString &fingerprint, QString &psbt)
 {
     LOCK(cs_ledger);
     std::string strFingerprint = fingerprint.toStdString();
     std::string strPsbt = psbt.toStdString();
-    bool ret = QtumLedger::instance().signTx(strFingerprint, strPsbt);
+    bool ret = YuPostLedger::instance().signTx(strFingerprint, strPsbt);
     psbt = QString::fromStdString(strPsbt);
-    if(!ret) d->strError = QString::fromStdString(QtumLedger::instance().errorMessage());
+    if(!ret) d->strError = QString::fromStdString(YuPostLedger::instance().errorMessage());
     return ret;
 }
 
-bool QtumHwiTool::signMessage(const QString &fingerprint, const QString &message, const QString &path, QString &signature)
+bool YuPostHwiTool::signMessage(const QString &fingerprint, const QString &message, const QString &path, QString &signature)
 {
     LOCK(cs_ledger);
     std::string strFingerprint = fingerprint.toStdString();
     std::string strMessage = message.toStdString();
     std::string strPath = path.toStdString();
     std::string strSignature = signature.toStdString();
-    bool ret = QtumLedger::instance().signMessage(strFingerprint, strMessage, strPath, strSignature);
+    bool ret = YuPostLedger::instance().signMessage(strFingerprint, strMessage, strPath, strSignature);
     signature = QString::fromStdString(strSignature);
-    if(!ret) d->strError = QString::fromStdString(QtumLedger::instance().errorMessage());
+    if(!ret) d->strError = QString::fromStdString(YuPostLedger::instance().errorMessage());
     return ret;
 }
 
-bool QtumHwiTool::signDelegate(const QString &fingerprint, QString &psbt)
+bool YuPostHwiTool::signDelegate(const QString &fingerprint, QString &psbt)
 {
     if(!d->model) return false;
 
@@ -269,7 +269,7 @@ bool QtumHwiTool::signDelegate(const QString &fingerprint, QString &psbt)
     return true;
 }
 
-QString QtumHwiTool::errorMessage()
+QString YuPostHwiTool::errorMessage()
 {
     // Get the last error message
     if(d->fStarted)
@@ -278,12 +278,12 @@ QString QtumHwiTool::errorMessage()
     return d->strError;
 }
 
-bool QtumHwiTool::isStarted()
+bool YuPostHwiTool::isStarted()
 {
     return d->fStarted;
 }
 
-void QtumHwiTool::wait()
+void YuPostHwiTool::wait()
 {
     if(d->fStarted)
     {
@@ -303,7 +303,7 @@ void QtumHwiTool::wait()
     }
 }
 
-bool QtumHwiTool::rescanBlockchain(int startHeight, int stopHeight)
+bool YuPostHwiTool::rescanBlockchain(int startHeight, int stopHeight)
 {
     if(!d->model) return false;
 
@@ -329,7 +329,7 @@ bool QtumHwiTool::rescanBlockchain(int startHeight, int stopHeight)
     return resStartHeight < resStopHeight;
 }
 
-bool QtumHwiTool::importAddresses(const QString &desc)
+bool YuPostHwiTool::importAddresses(const QString &desc)
 {
     if(!d->model) return false;
 
@@ -356,7 +356,7 @@ bool QtumHwiTool::importAddresses(const QString &desc)
     return countSuccess > 0;
 }
 
-bool QtumHwiTool::importMulti(const QStringList &descs)
+bool YuPostHwiTool::importMulti(const QStringList &descs)
 {
     bool ret = true;
     for(QString desc : descs)
@@ -368,7 +368,7 @@ bool QtumHwiTool::importMulti(const QStringList &descs)
     return ret;
 }
 
-bool QtumHwiTool::finalizePsbt(const QString &psbt, QString &hexTx, bool &complete)
+bool YuPostHwiTool::finalizePsbt(const QString &psbt, QString &hexTx, bool &complete)
 {
     if(!d->model) return false;
 
@@ -390,7 +390,7 @@ bool QtumHwiTool::finalizePsbt(const QString &psbt, QString &hexTx, bool &comple
     return true;
 }
 
-bool QtumHwiTool::sendRawTransaction(const QString &hexTx, QVariantMap& variantMap)
+bool YuPostHwiTool::sendRawTransaction(const QString &hexTx, QVariantMap& variantMap)
 {
     if(!d->model) return false;
 
@@ -420,7 +420,7 @@ bool QtumHwiTool::sendRawTransaction(const QString &hexTx, QVariantMap& variantM
     return variantMap.contains("txid");
 }
 
-bool QtumHwiTool::decodePsbt(const QString &psbt, QString &decoded)
+bool YuPostHwiTool::decodePsbt(const QString &psbt, QString &decoded)
 {
     if(!d->model) return false;
 
@@ -440,12 +440,12 @@ bool QtumHwiTool::decodePsbt(const QString &psbt, QString &decoded)
     return true;
 }
 
-void QtumHwiTool::setModel(WalletModel *model)
+void YuPostHwiTool::setModel(WalletModel *model)
 {
     d->model = model;
 }
 
-bool QtumHwiTool::execRPC(ExecRPCCommand *cmd, const QMap<QString, QString> &lstParams, QVariant &result, QString &resultJson)
+bool YuPostHwiTool::execRPC(ExecRPCCommand *cmd, const QMap<QString, QString> &lstParams, QVariant &result, QString &resultJson)
 {
     d->strError.clear();
     if(!cmd->exec(d->model->node(), d->model, lstParams, result, resultJson, d->strError))
@@ -454,27 +454,27 @@ bool QtumHwiTool::execRPC(ExecRPCCommand *cmd, const QMap<QString, QString> &lst
     return true;
 }
 
-void QtumHwiTool::addError(const QString &error)
+void YuPostHwiTool::addError(const QString &error)
 {
     if(d->strError != "")
         d->strError += "\n";
     d->strError += error;
 }
 
-QString QtumHwiTool::derivationPathPKH()
+QString YuPostHwiTool::derivationPathPKH()
 {
-    std::string path = QtumLedger::instance().derivationPath((int)OutputType::LEGACY);
+    std::string path = YuPostLedger::instance().derivationPath((int)OutputType::LEGACY);
     return QString::fromStdString(path);
 }
 
-QString QtumHwiTool::derivationPathP2SH()
+QString YuPostHwiTool::derivationPathP2SH()
 {
-    std::string path = QtumLedger::instance().derivationPath((int)OutputType::P2SH_SEGWIT);
+    std::string path = YuPostLedger::instance().derivationPath((int)OutputType::P2SH_SEGWIT);
     return QString::fromStdString(path);
 }
 
-QString QtumHwiTool::derivationPathBech32()
+QString YuPostHwiTool::derivationPathBech32()
 {
-    std::string path = QtumLedger::instance().derivationPath((int)OutputType::BECH32);
+    std::string path = YuPostLedger::instance().derivationPath((int)OutputType::BECH32);
     return QString::fromStdString(path);
 }

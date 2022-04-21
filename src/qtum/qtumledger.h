@@ -1,5 +1,5 @@
-#ifndef QTUMLEDGER_H
-#define QTUMLEDGER_H
+#ifndef YPOLEDGER_H
+#define YPOLEDGER_H
 
 #include <string>
 #include <vector>
@@ -7,7 +7,7 @@
 
 extern RecursiveMutex cs_ledger;
 
-class QtumLedgerPriv;
+class YuPostLedgerPriv;
 
 struct LedgerDevice
 {
@@ -23,20 +23,20 @@ struct LedgerDevice
 };
 
 /**
- * @brief The QtumLedger class Communicate with the qtum ledger
+ * @brief The YuPostLedger class Communicate with the yupostproject ledger
  */
-class QtumLedger {
+class YuPostLedger {
     
 public:
     /**
-     * @brief QtumLedger Constructor
+     * @brief YuPostLedger Constructor
      */
-    QtumLedger();
+    YuPostLedger();
 
     /**
-     * @brief ~QtumLedger Destructor
+     * @brief ~YuPostLedger Destructor
      */
-    virtual ~QtumLedger();
+    virtual ~YuPostLedger();
 
     /**
      * @brief signCoinStake Sign proof of stake transaction
@@ -127,7 +127,7 @@ public:
      * @brief instance Get the ledger instance
      * @return
      */
-    static QtumLedger &instance();
+    static YuPostLedger &instance();
 
 private:
     bool isStarted();
@@ -149,8 +149,8 @@ private:
     bool endGetKeyPool(const std::string& fingerprint, int type, const std::string& path, bool internal,  int from, int to, std::string& desc);
 
 private:
-    QtumLedger(const QtumLedger&);
-    QtumLedger& operator=(const QtumLedger&);
-    QtumLedgerPriv* d;
+    YuPostLedger(const YuPostLedger&);
+    YuPostLedger& operator=(const YuPostLedger&);
+    YuPostLedgerPriv* d;
 };
 #endif

@@ -46,11 +46,11 @@ static const int TOOLTIP_WRAP_THRESHOLD = 80;
 /* Number of frames in spinner animation */
 #define SPINNER_FRAMES 36
 
-#define QAPP_ORG_NAME "Qtum"
-#define QAPP_ORG_DOMAIN "qtum.org"
-#define QAPP_APP_NAME_DEFAULT "Qtum-Qt"
-#define QAPP_APP_NAME_TESTNET "Qtum-Qt-testnet"
-#define QAPP_APP_NAME_REGTEST "Qtum-Qt-regtest"
+#define QAPP_ORG_NAME "YuPost"
+#define QAPP_ORG_DOMAIN "yupostproject.org"
+#define QAPP_APP_NAME_DEFAULT "YuPost-Qt"
+#define QAPP_APP_NAME_TESTNET "YuPost-Qt-testnet"
+#define QAPP_APP_NAME_REGTEST "YuPost-Qt-regtest"
 
 /* One gigabyte (GB) in bytes */
 static constexpr uint64_t GB_BYTES{1000000000};
@@ -58,13 +58,13 @@ static constexpr uint64_t GB_BYTES{1000000000};
 // Default prune target displayed in GUI.
 static constexpr int DEFAULT_PRUNE_TARGET_GB{2};
 
-/* Mainnet qtum explorer uri */
-#define QTUM_INFO_MAINNET "<a href='https://qtum.info/%1/%2'>%2</a>"
+/* Mainnet yupostproject explorer uri */
+#define YPO_INFO_MAINNET "<a href='https://yupostproject.info/%1/%2'>%2</a>"
 
-/* Testnet qtum explorer uri */
-#define QTUM_INFO_TESTNET "<a href='https://testnet.qtum.info/%1/%2'>%2</a>"
+/* Testnet yupostproject explorer uri */
+#define YPO_INFO_TESTNET "<a href='https://testnet.yupostproject.info/%1/%2'>%2</a>"
 
 /* Hardware wallet interface uri */
-#define QTUM_HWI_TOOL "<a href='https://github.com/qtumproject/HWI/tags'>HWI Tool</a>"
+#define YPO_HWI_TOOL "<a href='https://github.com/yupostproject/HWI/tags'>HWI Tool</a>"
 
 #endif // BITCOIN_QT_GUICONSTANTS_H

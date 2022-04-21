@@ -1,13 +1,13 @@
-#ifndef QTUMUTILS_H
-#define QTUMUTILS_H
+#ifndef YPOUTILS_H
+#define YPOUTILS_H
 
 #include <libdevcore/Common.h>
 #include <libdevcore/FixedHash.h>
 
 /**
- * qtumutils Provides utility functions to EVM for functionalities that already exist in qtum
+ * yupostprojectutils Provides utility functions to EVM for functionalities that already exist in yupostproject
  */
-namespace qtumutils
+namespace yupostprojectutils
 {
 /**
  * @brief btc_ecrecover Wrapper to CPubKey::RecoverCompact

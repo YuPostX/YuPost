@@ -8,10 +8,10 @@ from test_framework.util import *
 from test_framework.script import *
 from test_framework.mininode import *
 
-from test_framework.qtum import generatesynchronized
+from test_framework.yupostproject import generatesynchronized
 import sys
 
-class QtumCallContractStateNotRevertedTest(BitcoinTestFramework):
+class YuPostCallContractStateNotRevertedTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2
@@ -37,4 +37,4 @@ class QtumCallContractStateNotRevertedTest(BitcoinTestFramework):
 
 
 if __name__ == '__main__':
-    QtumCallContractStateNotRevertedTest().main()
+    YuPostCallContractStateNotRevertedTest().main()

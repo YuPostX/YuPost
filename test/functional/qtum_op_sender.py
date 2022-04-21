@@ -4,7 +4,7 @@ from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import *
 from test_framework.script import *
 from test_framework.mininode import *
-from test_framework.qtum import *
+from test_framework.yupostproject import *
 from test_framework.address import *
 from test_framework.blocktools import *
 from test_framework.key import *
@@ -122,7 +122,7 @@ def wif_to_ECKey(wif):
 
 HASHTYPES = [SIGHASH_ALL, SIGHASH_SINGLE, SIGHASH_NONE, SIGHASH_ANYONECANPAY]
 
-class QtumOpSenderTest(BitcoinTestFramework):
+class YuPostOpSenderTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2
@@ -488,4 +488,4 @@ class QtumOpSenderTest(BitcoinTestFramework):
 
 
 if __name__ == '__main__':
-    QtumOpSenderTest().main()
+    YuPostOpSenderTest().main()

@@ -7,15 +7,15 @@ from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import *
 from test_framework.script import *
 from test_framework.mininode import *
-from test_framework.qtum import *
-from test_framework.qtumconfig import *
+from test_framework.yupostproject import *
+from test_framework.yupostprojectconfig import *
 import sys
 import io
 import pprint
 
 pp = pprint.PrettyPrinter()
 
-class QtumEVMRevertTest(BitcoinTestFramework):
+class YuPostEVMRevertTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1
@@ -141,4 +141,4 @@ class QtumEVMRevertTest(BitcoinTestFramework):
         
 
 if __name__ == '__main__':
-    QtumEVMRevertTest().main()
+    YuPostEVMRevertTest().main()

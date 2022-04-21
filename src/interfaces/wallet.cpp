@@ -22,7 +22,7 @@
 #include <wallet/rpcwallet.h>
 #include <wallet/wallet.h>
 #include <key_io.h>
-#include <qtum/qtumdelegation.h>
+#include <yupostproject/yupostprojectdelegation.h>
 #include <miner.h>
 
 #include <memory>
@@ -645,7 +645,7 @@ public:
         LOCK(m_wallet->cs_wallet);
         return m_wallet->GetCredit(txout, filter);
     }
-    bool isUnspentAddress(const std::string &qtumAddress) override
+    bool isUnspentAddress(const std::string &yupostprojectAddress) override
     {
         auto locked_chain = m_wallet->chain().lock();
         LOCK(m_wallet->cs_wallet);
@@ -658,7 +658,7 @@ public:
             const CScript& scriptPubKey = out.tx->tx->vout[out.i].scriptPubKey;
             bool fValidAddress = ExtractDestination(scriptPubKey, address);
 
-            if(fValidAddress && EncodeDestination(address) == qtumAddress && out.tx->tx->vout[out.i].nValue)
+            if(fValidAddress && EncodeDestination(address) == yupostprojectAddress && out.tx->tx->vout[out.i].nValue)
             {
                 return true;
             }
@@ -1007,10 +1007,10 @@ public:
             if(keyID)
             {
                 uint160 address(*keyID);
-                contractRet = m_qtumDelegation.ExistDelegationContract() ? m_qtumDelegation.GetDelegation(address, delegation) : false;
+                contractRet = m_yupostprojectDelegation.ExistDelegationContract() ? m_yupostprojectDelegation.GetDelegation(address, delegation) : false;
                 if(contractRet)
                 {
-                    validated = m_qtumDelegation.VerifyDelegation(address, delegation);
+                    validated = m_yupostprojectDelegation.VerifyDelegation(address, delegation);
                     info.staker_address = EncodeDestination(PKHash(delegation.staker));
                     info.fee = delegation.fee;
                     info.block_number = delegation.blockHeight;
@@ -1072,10 +1072,10 @@ public:
         if(keyID)
         {
             uint160 address(*keyID);
-            details.c_contract_return = m_qtumDelegation.ExistDelegationContract() ? m_qtumDelegation.GetDelegation(address, delegation) : false;
+            details.c_contract_return = m_yupostprojectDelegation.ExistDelegationContract() ? m_yupostprojectDelegation.GetDelegation(address, delegation) : false;
             if(details.c_contract_return)
             {
-                details.c_entry_exist = m_qtumDelegation.VerifyDelegation(address, delegation);
+                details.c_entry_exist = m_yupostprojectDelegation.VerifyDelegation(address, delegation);
                 details.c_delegate_address = sAddress;
                 details.c_staker_address = EncodeDestination(PKHash(delegation.staker));
                 details.c_fee = delegation.fee;
@@ -1390,10 +1390,10 @@ public:
                     if(v.scriptPubKey.HasOpCall()){
                         std::vector<unsigned char> data;
                         v.scriptPubKey.GetData(data);
-                        if(QtumDelegation::IsAddBytecode(data))
+                        if(YuPostDelegation::IsAddBytecode(data))
                         {
                             std::string hexStaker;
-                            if(!QtumDelegation::GetUnsignedStaker(data, hexStaker))
+                            if(!YuPostDelegation::GetUnsignedStaker(data, hexStaker))
                             {
                                 error = "Fail to get unsigned staker";
                                 return false;
@@ -1445,7 +1445,7 @@ public:
                 std::vector<unsigned char> data;
                 v.scriptPubKey.GetData(data);
                 CScript scriptRet;
-                if(QtumDelegation::SetSignedStaker(data, PoD) && v.scriptPubKey.SetData(data, scriptRet))
+                if(YuPostDelegation::SetSignedStaker(data, PoD) && v.scriptPubKey.SetData(data, scriptRet))
                 {
                     v.scriptPubKey = scriptRet;
                 }
@@ -1543,7 +1543,7 @@ public:
     }
 
     std::shared_ptr<CWallet> m_wallet;
-    QtumDelegation m_qtumDelegation;
+    YuPostDelegation m_yupostprojectDelegation;
 };
 
 class WalletClientImpl : public ChainClient

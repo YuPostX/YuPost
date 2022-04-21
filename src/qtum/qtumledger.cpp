@@ -1,4 +1,4 @@
-#include <qtum/qtumledger.h>
+#include <yupostproject/yupostprojectledger.h>
 #include <util/system.h>
 #include <chainparams.h>
 #include <univalue.h>
@@ -16,7 +16,7 @@
 
 RecursiveMutex cs_ledger;
 
-namespace QtumLedger_NS {
+namespace YuPostLedger_NS {
 // Read json document
 UniValue json_read_doc(const std::string& jsondata)
 {
@@ -93,7 +93,7 @@ bool isPyPath(const std::string& str)
 }
 #endif
 
-// Start process from qtumd
+// Start process from yupostprojectd
 class CProcess
 {
 public:
@@ -173,12 +173,12 @@ private:
     std::string m_std_err;
 };
 }
-using namespace QtumLedger_NS;
+using namespace YuPostLedger_NS;
 
-class QtumLedgerPriv
+class YuPostLedgerPriv
 {
 public:
-    QtumLedgerPriv()
+    YuPostLedgerPriv()
     {
         toolPath = gArgs.GetArg("-hwitoolpath", "");
         toolExists = boost::filesystem::exists(toolPath);
@@ -193,7 +193,7 @@ public:
 
         if(!toolExists)
         {
-            LogPrintf("QtumLedger(): HWI tool not found %s\n", toolPath);
+            LogPrintf("YuPostLedger(): HWI tool not found %s\n", toolPath);
         }
     }
 
@@ -244,26 +244,26 @@ public:
     bool ledgerMainPath = true;
 };
 
-QtumLedger::QtumLedger():
+YuPostLedger::YuPostLedger():
     d(0)
 {
-    d = new QtumLedgerPriv();
+    d = new YuPostLedgerPriv();
 }
 
-QtumLedger::~QtumLedger()
+YuPostLedger::~YuPostLedger()
 {
     if(d)
         delete d;
     d = 0;
 }
 
-QtumLedger &QtumLedger::instance()
+YuPostLedger &YuPostLedger::instance()
 {
-    static QtumLedger device;
+    static YuPostLedger device;
     return device;
 }
 
-bool QtumLedger::signCoinStake(const std::string &fingerprint, std::string &psbt)
+bool YuPostLedger::signCoinStake(const std::string &fingerprint, std::string &psbt)
 {
     LOCK(cs_ledger);
     // Check if tool exists
@@ -282,7 +282,7 @@ bool QtumLedger::signCoinStake(const std::string &fingerprint, std::string &psbt
     return endSignTx(fingerprint, psbt);
 }
 
-bool QtumLedger::signBlockHeader(const std::string &fingerprint, const std::string &header, const std::string &path, std::vector<unsigned char> &vchSig)
+bool YuPostLedger::signBlockHeader(const std::string &fingerprint, const std::string &header, const std::string &path, std::vector<unsigned char> &vchSig)
 {
     LOCK(cs_ledger);
     // Check if tool exists
@@ -301,7 +301,7 @@ bool QtumLedger::signBlockHeader(const std::string &fingerprint, const std::stri
     return endSignBlockHeader(fingerprint, header, path, vchSig);
 }
 
-bool QtumLedger::isConnected(const std::string &fingerprint, bool stake)
+bool YuPostLedger::isConnected(const std::string &fingerprint, bool stake)
 {
     // Check if a device is connected
     std::vector<LedgerDevice> devices;
@@ -317,7 +317,7 @@ bool QtumLedger::isConnected(const std::string &fingerprint, bool stake)
     return false;
 }
 
-bool QtumLedger::enumerate(std::vector<LedgerDevice> &devices, bool stake)
+bool YuPostLedger::enumerate(std::vector<LedgerDevice> &devices, bool stake)
 {
     LOCK(cs_ledger);
     // Check if tool exists
@@ -336,7 +336,7 @@ bool QtumLedger::enumerate(std::vector<LedgerDevice> &devices, bool stake)
     return endEnumerate(devices, stake);
 }
 
-bool QtumLedger::signTx(const std::string &fingerprint, std::string &psbt)
+bool YuPostLedger::signTx(const std::string &fingerprint, std::string &psbt)
 {
     LOCK(cs_ledger);
     // Check if tool exists
@@ -355,7 +355,7 @@ bool QtumLedger::signTx(const std::string &fingerprint, std::string &psbt)
     return endSignTx(fingerprint, psbt);
 }
 
-bool QtumLedger::signMessage(const std::string &fingerprint, const std::string &message, const std::string &path, std::string &signature)
+bool YuPostLedger::signMessage(const std::string &fingerprint, const std::string &message, const std::string &path, std::string &signature)
 {
     LOCK(cs_ledger);
     // Check if tool exists
@@ -374,7 +374,7 @@ bool QtumLedger::signMessage(const std::string &fingerprint, const std::string &
     return endSignMessage(fingerprint, message, path, signature);
 }
 
-bool QtumLedger::getKeyPool(const std::string &fingerprint, int type, const std::string& path, bool internal, int from, int to, std::string &desc)
+bool YuPostLedger::getKeyPool(const std::string &fingerprint, int type, const std::string& path, bool internal, int from, int to, std::string &desc)
 {
     LOCK(cs_ledger);
     // Check if tool exists
@@ -393,7 +393,7 @@ bool QtumLedger::getKeyPool(const std::string &fingerprint, int type, const std:
     return endGetKeyPool(fingerprint, type, path, internal, from, to, desc);
 }
 
-std::string QtumLedger::errorMessage()
+std::string YuPostLedger::errorMessage()
 {
     LOCK(cs_ledger);
     if(d->strError.empty() == false)
@@ -415,17 +415,17 @@ std::string QtumLedger::errorMessage()
     return "unknown error";
 }
 
-bool QtumLedger::toolExists()
+bool YuPostLedger::toolExists()
 {
     return d->toolExists;
 }
 
-bool QtumLedger::isStarted()
+bool YuPostLedger::isStarted()
 {
     return d->fStarted;
 }
 
-void QtumLedger::wait()
+void YuPostLedger::wait()
 {
     if(d->fStarted)
     {
@@ -436,7 +436,7 @@ void QtumLedger::wait()
     }
 }
 
-bool QtumLedger::beginSignTx(const std::string &fingerprint, std::string &psbt)
+bool YuPostLedger::beginSignTx(const std::string &fingerprint, std::string &psbt)
 {
     // Execute command line
     std::vector<std::string> arguments = d->arguments;
@@ -447,7 +447,7 @@ bool QtumLedger::beginSignTx(const std::string &fingerprint, std::string &psbt)
     return d->fStarted;
 }
 
-bool QtumLedger::endSignTx(const std::string &, std::string &psbt)
+bool YuPostLedger::endSignTx(const std::string &, std::string &psbt)
 {
     // Decode command line results
     UniValue jsonDocument = json_read_doc(d->strStdout);
@@ -462,7 +462,7 @@ bool QtumLedger::endSignTx(const std::string &, std::string &psbt)
     return false;
 }
 
-bool QtumLedger::beginSignBlockHeader(const std::string &fingerprint, const std::string &header, const std::string &path, std::vector<unsigned char> &)
+bool YuPostLedger::beginSignBlockHeader(const std::string &fingerprint, const std::string &header, const std::string &path, std::vector<unsigned char> &)
 {
     // Execute command line
     std::vector<std::string> arguments = d->arguments;
@@ -473,7 +473,7 @@ bool QtumLedger::beginSignBlockHeader(const std::string &fingerprint, const std:
     return d->fStarted;
 }
 
-bool QtumLedger::endSignBlockHeader(const std::string &, const std::string &, const std::string &, std::vector<unsigned char> &vchSig)
+bool YuPostLedger::endSignBlockHeader(const std::string &, const std::string &, const std::string &, std::vector<unsigned char> &vchSig)
 {
     // Decode command line results
     UniValue jsonDocument = json_read_doc(d->strStdout);
@@ -488,7 +488,7 @@ bool QtumLedger::endSignBlockHeader(const std::string &, const std::string &, co
     return false;
 }
 
-bool QtumLedger::beginEnumerate(std::vector<LedgerDevice> &)
+bool YuPostLedger::beginEnumerate(std::vector<LedgerDevice> &)
 {
     // Execute command line
     std::vector<std::string> arguments = d->arguments;
@@ -499,7 +499,7 @@ bool QtumLedger::beginEnumerate(std::vector<LedgerDevice> &)
     return d->fStarted;
 }
 
-bool QtumLedger::endEnumerate(std::vector<LedgerDevice> &devices, bool stake)
+bool YuPostLedger::endEnumerate(std::vector<LedgerDevice> &devices, bool stake)
 {
     // Decode command line results
     UniValue jsonDocument = json_read_doc(d->strStdout);
@@ -521,7 +521,7 @@ bool QtumLedger::endEnumerate(std::vector<LedgerDevice> &devices, bool stake)
         device.model = json_get_key_string(data, "model");
         device.code = json_get_key_string(data, "code");
         device.app_name = json_get_key_string(data, "app_name");
-        bool isStakeApp = device.app_name == "Qtum Stake" || device.app_name == "Qtum Stake Test";
+        bool isStakeApp = device.app_name == "YuPost Stake" || device.app_name == "YuPost Stake Test";
         if(isStakeApp == stake)
         {
             devices.push_back(device);
@@ -531,7 +531,7 @@ bool QtumLedger::endEnumerate(std::vector<LedgerDevice> &devices, bool stake)
     return devices.size() > 0;
 }
 
-bool QtumLedger::beginSignMessage(const std::string &fingerprint, const std::string &message, const std::string &path, std::string &)
+bool YuPostLedger::beginSignMessage(const std::string &fingerprint, const std::string &message, const std::string &path, std::string &)
 {
     // Execute command line
     std::vector<std::string> arguments = d->arguments;
@@ -542,7 +542,7 @@ bool QtumLedger::beginSignMessage(const std::string &fingerprint, const std::str
     return d->fStarted;
 }
 
-bool QtumLedger::endSignMessage(const std::string &, const std::string &, const std::string &, std::string &signature)
+bool YuPostLedger::endSignMessage(const std::string &, const std::string &, const std::string &, std::string &signature)
 {
     // Decode command line results
     UniValue jsonDocument = json_read_doc(d->strStdout);
@@ -557,7 +557,7 @@ bool QtumLedger::endSignMessage(const std::string &, const std::string &, const 
     return false;
 }
 
-bool QtumLedger::beginGetKeyPool(const std::string &fingerprint, int type, const std::string& path, bool internal, int from, int to, std::string &)
+bool YuPostLedger::beginGetKeyPool(const std::string &fingerprint, int type, const std::string& path, bool internal, int from, int to, std::string &)
 {
     // Get the output type
     std::string descType;
@@ -595,7 +595,7 @@ bool QtumLedger::beginGetKeyPool(const std::string &fingerprint, int type, const
     return d->fStarted;
 }
 
-bool QtumLedger::endGetKeyPool(const std::string &, int, const std::string& , bool, int, int, std::string &desc)
+bool YuPostLedger::endGetKeyPool(const std::string &, int, const std::string& , bool, int, int, std::string &desc)
 {
     // Decode command line results
     bool ret = d->strStdout.find("desc")!=std::string::npos;
@@ -604,7 +604,7 @@ bool QtumLedger::endGetKeyPool(const std::string &, int, const std::string& , bo
 }
 
 
-std::string QtumLedger::derivationPath(int type)
+std::string YuPostLedger::derivationPath(int type)
 {
     std::string derivPath;
     if(d->ledgerMainPath)

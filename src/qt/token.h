@@ -4,12 +4,12 @@
 #include <vector>
 #include <map>
 #include <uint256.h>
-#include <qtum/qtumtoken.h>
+#include <yupostproject/yupostprojecttoken.h>
 
 struct TokenData;
 class WalletModel;
 
-class Token : public QtumTokenExec, public QtumToken
+class Token : public YuPostTokenExec, public YuPostToken
 {
 public:
     Token();

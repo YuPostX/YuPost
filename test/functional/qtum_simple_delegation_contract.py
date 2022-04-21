@@ -4,11 +4,11 @@ from test_framework.test_framework import BitcoinTestFramework
 from test_framework.messages import *
 from test_framework.script import *
 from test_framework.mininode import *
-from test_framework.qtum import *
-from test_framework.qtumconfig import *
+from test_framework.yupostproject import *
+from test_framework.yupostprojectconfig import *
 from test_framework.util import *
 
-class QtumSimpleDelegationContractTest(BitcoinTestFramework):
+class YuPostSimpleDelegationContractTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2
@@ -57,4 +57,4 @@ class QtumSimpleDelegationContractTest(BitcoinTestFramework):
 
 
 if __name__ == '__main__':
-    QtumSimpleDelegationContractTest().main()
+    YuPostSimpleDelegationContractTest().main()

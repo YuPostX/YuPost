@@ -14,8 +14,8 @@ from test_framework.util import (
 )
 
 from decimal import Decimal
-from test_framework.qtumconfig import COINBASE_MATURITY
-from test_framework.qtum import generatesynchronized
+from test_framework.yupostprojectconfig import COINBASE_MATURITY
+from test_framework.yupostproject import generatesynchronized
 
 class ListSinceBlockTest(BitcoinTestFramework):
     def set_test_params(self):

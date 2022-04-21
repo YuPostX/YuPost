@@ -4,8 +4,8 @@ from test_framework.test_framework import BitcoinTestFramework
 from test_framework.messages import *
 from test_framework.script import *
 from test_framework.mininode import *
-from test_framework.qtum import *
-from test_framework.qtumconfig import *
+from test_framework.yupostproject import *
+from test_framework.yupostprojectconfig import *
 from test_framework.util import *
 import pprint
 pp = pprint.PrettyPrinter()
@@ -13,7 +13,7 @@ pp = pprint.PrettyPrinter()
 
 OFFLINE_STAKING_ACTIVATION_HEIGHT = 3*COINBASE_MATURITY+101
 
-class QtumSimpleDelegationContractTest(BitcoinTestFramework):
+class YuPostSimpleDelegationContractTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 5
@@ -209,10 +209,10 @@ class QtumSimpleDelegationContractTest(BitcoinTestFramework):
 
 
     """
-        - Check that it is not possible to use an input with less value than 100 qtum as the first input to the coinstake.
-        - Check that 100 qtum is just enough for the first input to the coinstake.
+        - Check that it is not possible to use an input with less value than 100 yupostproject as the first input to the coinstake.
+        - Check that 100 yupostproject is just enough for the first input to the coinstake.
     """
-    def nas_staker_must_be_100_qtum_test(self):
+    def nas_staker_must_be_100_yupostproject_test(self):
         use_pos_reward = True if self.staker.getblockcount() > 5000 else False
         staker_prevouts = collect_prevouts(self.staker, min_confirmations=COINBASE_MATURITY, amount=20000)
         prevout = staker_prevouts[0]
@@ -591,8 +591,8 @@ class QtumSimpleDelegationContractTest(BitcoinTestFramework):
         self.staker_must_be_the_delegated_staker_test()
         self.sync_all()
 
-        print("nas_staker_must_be_100_qtum_test")
-        self.nas_staker_must_be_100_qtum_test()
+        print("nas_staker_must_be_100_yupostproject_test")
+        self.nas_staker_must_be_100_yupostproject_test()
         self.sync_all()
         
         print("invalid_op_return_coinstake_output_test")
@@ -612,4 +612,4 @@ class QtumSimpleDelegationContractTest(BitcoinTestFramework):
         self.sync_all()
 
 if __name__ == '__main__':
-    QtumSimpleDelegationContractTest().main()
+    YuPostSimpleDelegationContractTest().main()

@@ -10,11 +10,11 @@ from test_framework.mininode import *
 from test_framework.blocktools import *
 from test_framework.address import *
 from test_framework.key import ECKey
-from test_framework.qtumconfig import TIMESTAMP_MASK
+from test_framework.yupostprojectconfig import TIMESTAMP_MASK
 import io
 import struct
 
-class QtumPOSTest(BitcoinTestFramework):
+class YuPostPOSTest(BitcoinTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
         self.setup_clean_chain = True
@@ -394,4 +394,4 @@ class QtumPOSTest(BitcoinTestFramework):
         return (block, block_sig_key)
 
 if __name__ == '__main__':
-    QtumPOSTest().main()
+    YuPostPOSTest().main()

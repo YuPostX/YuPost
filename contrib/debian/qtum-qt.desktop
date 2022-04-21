@@ -1,12 +1,12 @@
 [Desktop Entry]
 Version=0.17.6
-Name=Qtum Core
-Comment=Connect to the Qtum P2P Network
-Exec=qtum-qt %u
+Name=YuPost Core
+Comment=Connect to the YuPost P2P Network
+Exec=yupostproject-qt %u
 Terminal=false
 Type=Application
-Icon=qtum128
-MimeType=x-scheme-handler/qtum;
+Icon=yupostproject128
+MimeType=x-scheme-handler/yupostproject;
 Categories=Network;
-StartupWMClass=Qtum-qt
-Name[en_US]=qtum-qt
+StartupWMClass=YuPost-qt
+Name[en_US]=yupostproject-qt

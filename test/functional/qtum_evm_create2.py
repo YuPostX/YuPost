@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2016-2019 The Qtum Core developers
+# Copyright (c) 2016-2019 The YuPost Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -7,14 +7,14 @@ from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import *
 from test_framework.script import *
 from test_framework.mininode import *
-from test_framework.qtum import *
-from test_framework.qtumconfig import *
+from test_framework.yupostproject import *
+from test_framework.yupostprojectconfig import *
 import sys
 import io
 import pprint
 
 
-class QtumEVMCreate2Test(BitcoinTestFramework):
+class YuPostEVMCreate2Test(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1
@@ -219,4 +219,4 @@ class QtumEVMCreate2Test(BitcoinTestFramework):
 
 
 if __name__ == '__main__':
-    QtumEVMCreate2Test().main()
+    YuPostEVMCreate2Test().main()

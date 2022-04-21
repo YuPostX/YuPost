@@ -5,12 +5,12 @@ from test_framework.util import *
 from test_framework.script import *
 from test_framework.mininode import *
 from test_framework.blocktools import *
-from test_framework.qtum import *
+from test_framework.yupostproject import *
 
 """
  This test specifically tests that inputs to transactions in the mempool are not used in staking.
 """
-class QtumPOSConflictingStakingMempoolTxTest(BitcoinTestFramework):
+class YuPostPOSConflictingStakingMempoolTxTest(BitcoinTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
         self.setup_clean_chain = True
@@ -97,4 +97,4 @@ class QtumPOSConflictingStakingMempoolTxTest(BitcoinTestFramework):
         assert_equal(int(self.nodes[0].getbalance()*COIN), int((19*(INITIAL_BLOCK_REWARD-0.01)+INITIAL_BLOCK_REWARD)*COIN))
         assert_equal(self.nodes[0].getbestblockhash(), self.nodes[1].getbestblockhash())
 if __name__ == '__main__':
-    QtumPOSConflictingStakingMempoolTxTest().main()
+    YuPostPOSConflictingStakingMempoolTxTest().main()

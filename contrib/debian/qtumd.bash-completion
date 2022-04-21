@@ -1,2 +1,2 @@
-contrib/qtumd.bash-completion	        qtumd
-contrib/qtum-cli.bash-completion	qtum-cli
+contrib/yupostprojectd.bash-completion	        yupostprojectd
+contrib/yupostproject-cli.bash-completion	yupostproject-cli

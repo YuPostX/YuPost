@@ -8,7 +8,7 @@ from test_framework.util import *
 from test_framework.script import *
 from test_framework.mininode import *
 from test_framework.messages import *
-from test_framework.qtum import *
+from test_framework.yupostproject import *
 import sys
 import time
 import subprocess
@@ -21,7 +21,7 @@ def get_dir_size(path):
     return size
 
 
-class QtumHeaderSpamTest(BitcoinTestFramework):
+class YuPostHeaderSpamTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2
@@ -325,4 +325,4 @@ class QtumHeaderSpamTest(BitcoinTestFramework):
         assert_equal(self.nodes[1].getchaintips()[0]['hash'], self.node.getbestblockhash())
 
 if __name__ == '__main__':
-    QtumHeaderSpamTest().main()
+    YuPostHeaderSpamTest().main()

@@ -8,7 +8,7 @@ from test_framework.util import *
 from test_framework.blocktools import *
 from test_framework.mininode import *
 from test_framework.address import *
-from test_framework.qtum import *
+from test_framework.yupostproject import *
 from test_framework.script import *
 import time
 import pprint
@@ -31,7 +31,7 @@ qrc20listtransactions
 """
 
 
-class QtumQRC20Test(BitcoinTestFramework):
+class YuPostQRC20Test(BitcoinTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
         self.setup_clean_chain = True
@@ -85,7 +85,7 @@ class QtumQRC20Test(BitcoinTestFramework):
             */
             contract QRC20Token is SafeMath {
                 string public constant standard = 'Token 0.1';
-                uint8 public constant decimals = 8; // it's recommended to set decimals to 8 in QTUM
+                uint8 public constant decimals = 8; // it's recommended to set decimals to 8 in YPO
 
                 // you need change the following three values
                 string public constant name = 'QRC TEST';
@@ -329,4 +329,4 @@ class QtumQRC20Test(BitcoinTestFramework):
 
 
 if __name__ == '__main__':
-    QtumQRC20Test().main()
+    YuPostQRC20Test().main()

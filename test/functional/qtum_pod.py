@@ -3,12 +3,12 @@
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import *
 from test_framework.blocktools import *
-from test_framework.qtum import *
+from test_framework.yupostproject import *
 from test_framework.script import *
 from test_framework.address import *
 import time
 
-class QtumPODTest(BitcoinTestFramework):
+class YuPostPODTest(BitcoinTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
         self.setup_clean_chain = True
@@ -101,4 +101,4 @@ class QtumPODTest(BitcoinTestFramework):
         assert_equal(self.staker.getbestblockhash(), block.hash)
 
 if __name__ == '__main__':
-    QtumPODTest().main()
+    YuPostPODTest().main()

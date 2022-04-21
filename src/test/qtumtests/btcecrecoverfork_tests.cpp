@@ -1,5 +1,5 @@
 #include <boost/test/unit_test.hpp>
-#include <qtumtests/test_utils.h>
+#include <yupostprojecttests/test_utils.h>
 #include <script/standard.h>
 #include <chainparams.h>
 
@@ -107,17 +107,17 @@ BOOST_AUTO_TEST_CASE(checking_btcecrecover_after_fork){
     dev::h256 hashTx(HASHTX);
 
     // Create contract
-    std::vector<QtumTransaction> txs;
-    txs.push_back(createQtumTransaction(CODE[0], 0, GASLIMIT, dev::u256(1), hashTx, dev::Address()));
+    std::vector<YuPostTransaction> txs;
+    txs.push_back(createYuPostTransaction(CODE[0], 0, GASLIMIT, dev::u256(1), hashTx, dev::Address()));
     executeBC(txs);
 
     // Call btc_ecrecover
-    dev::Address proxy = createQtumAddress(txs[0].getHashWith(), txs[0].getNVout());
-    std::vector<QtumTransaction> txBtcEcrecover;
-    txBtcEcrecover.push_back(createQtumTransaction(CODE[1], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
-    txBtcEcrecover.push_back(createQtumTransaction(CODE[2], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
-    txBtcEcrecover.push_back(createQtumTransaction(CODE[3], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
-    txBtcEcrecover.push_back(createQtumTransaction(CODE[4], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
+    dev::Address proxy = createYuPostAddress(txs[0].getHashWith(), txs[0].getNVout());
+    std::vector<YuPostTransaction> txBtcEcrecover;
+    txBtcEcrecover.push_back(createYuPostTransaction(CODE[1], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
+    txBtcEcrecover.push_back(createYuPostTransaction(CODE[2], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
+    txBtcEcrecover.push_back(createYuPostTransaction(CODE[3], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
+    txBtcEcrecover.push_back(createYuPostTransaction(CODE[4], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
 
     // Execute contracts
     auto result = executeBC(txBtcEcrecover);
@@ -141,17 +141,17 @@ BOOST_AUTO_TEST_CASE(checking_btcecrecover_before_fork){
     dev::h256 hashTx(HASHTX);
 
     // Create contract
-    std::vector<QtumTransaction> txs;
-    txs.push_back(createQtumTransaction(CODE[0], 0, GASLIMIT, dev::u256(1), hashTx, dev::Address()));
+    std::vector<YuPostTransaction> txs;
+    txs.push_back(createYuPostTransaction(CODE[0], 0, GASLIMIT, dev::u256(1), hashTx, dev::Address()));
     executeBC(txs);
 
     // Call btc_ecrecover
-    dev::Address proxy = createQtumAddress(txs[0].getHashWith(), txs[0].getNVout());
-    std::vector<QtumTransaction> txBtcEcrecover;
-    txBtcEcrecover.push_back(createQtumTransaction(CODE[1], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
-    txBtcEcrecover.push_back(createQtumTransaction(CODE[2], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
-    txBtcEcrecover.push_back(createQtumTransaction(CODE[3], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
-    txBtcEcrecover.push_back(createQtumTransaction(CODE[4], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
+    dev::Address proxy = createYuPostAddress(txs[0].getHashWith(), txs[0].getNVout());
+    std::vector<YuPostTransaction> txBtcEcrecover;
+    txBtcEcrecover.push_back(createYuPostTransaction(CODE[1], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
+    txBtcEcrecover.push_back(createYuPostTransaction(CODE[2], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
+    txBtcEcrecover.push_back(createYuPostTransaction(CODE[3], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
+    txBtcEcrecover.push_back(createYuPostTransaction(CODE[4], 0, GASLIMIT, dev::u256(1), ++hashTx, proxy));
 
      // Execute contracts
     auto result = executeBC(txBtcEcrecover);

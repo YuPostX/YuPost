@@ -93,8 +93,8 @@ std::string CBlock::ToString() const
         hashPrevBlock.ToString(),
         hashMerkleRoot.ToString(),
         nTime, nBits, nNonce,
-        hashStateRoot.ToString(), // qtum
-        hashUTXORoot.ToString(), // qtum
+        hashStateRoot.ToString(), // yupostproject
+        hashUTXORoot.ToString(), // yupostproject
         HexStr(vchBlockSigDlgt),
         IsProofOfStake() ? "PoS" : "PoW",
         prevoutStake.ToString(),

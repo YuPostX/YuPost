@@ -5,13 +5,13 @@ from test_framework.util import *
 from test_framework.script import *
 from test_framework.mininode import *
 from test_framework.address import *
-from test_framework.qtum import *
+from test_framework.yupostproject import *
 import pprint
 import subprocess
 
 pp = pprint.PrettyPrinter()
 
-class QtumEVMConstantinoplePrecompiledContractsTest(BitcoinTestFramework):
+class YuPostEVMConstantinoplePrecompiledContractsTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1
@@ -662,4 +662,4 @@ class QtumEVMConstantinoplePrecompiledContractsTest(BitcoinTestFramework):
         self.bn256pairing_test(should_fail=False)
 
 if __name__ == '__main__':
-    QtumEVMConstantinoplePrecompiledContractsTest().main()
+    YuPostEVMConstantinoplePrecompiledContractsTest().main()

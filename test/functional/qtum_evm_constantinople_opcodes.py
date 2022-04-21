@@ -5,13 +5,13 @@ from test_framework.util import *
 from test_framework.script import *
 from test_framework.mininode import *
 from test_framework.address import *
-from test_framework.qtum import *
+from test_framework.yupostproject import *
 import pprint
 import subprocess
 
 pp = pprint.PrettyPrinter()
 
-class QtumEVMConstantinopleOpcodesTest(BitcoinTestFramework):
+class YuPostEVMConstantinopleOpcodesTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1
@@ -476,4 +476,4 @@ class QtumEVMConstantinopleOpcodesTest(BitcoinTestFramework):
         self.extcodehash_test(should_fail=False)
 
 if __name__ == '__main__':
-    QtumEVMConstantinopleOpcodesTest().main()
+    YuPostEVMConstantinopleOpcodesTest().main()

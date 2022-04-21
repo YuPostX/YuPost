@@ -1,9 +1,9 @@
-#ifndef QTUMVERSIONCHECKER_H
-#define QTUMVERSIONCHECKER_H
+#ifndef YPOVERSIONCHECKER_H
+#define YPOVERSIONCHECKER_H
 
 #include <QObject>
 
-#define QTUM_RELEASES "https://github.com/qtumproject/qtum/releases"
+#define YPO_RELEASES "https://github.com/yupostproject/yupostproject/releases"
 
 class Version {
 
@@ -79,12 +79,12 @@ private:
     }
 };
 
-class QtumVersionChecker : public QObject
+class YuPostVersionChecker : public QObject
 {
     Q_OBJECT
 public:
-    explicit QtumVersionChecker(QObject *parent = 0);
-    ~QtumVersionChecker();
+    explicit YuPostVersionChecker(QObject *parent = 0);
+    ~YuPostVersionChecker();
 
     bool newVersionAvailable();
 
@@ -95,4 +95,4 @@ private:
     Version currentVersion;
 };
 
-#endif // QTUMVERSIONCHECKER_H
+#endif // YPOVERSIONCHECKER_H
