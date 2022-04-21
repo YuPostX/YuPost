@@ -43,7 +43,7 @@ QString BitcoinUnits::longName(int unit)
     case BTC: return QString("YPO");
     case mBTC: return QString("mYPO");
     case uBTC: return QString::fromUtf8("μYPO (bits)");
-    case SAT: return QString("Satoshi (sat)");
+    case SAT: return QString("nYPO");
     default: return QString("???");
     }
 }
