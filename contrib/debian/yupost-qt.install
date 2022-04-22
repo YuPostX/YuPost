@@ -1,6 +1,0 @@
-usr/local/bin/yupost-qt usr/bin
-share/pixmaps/yupost32.xpm usr/share/pixmaps
-share/pixmaps/yupost16.xpm usr/share/pixmaps
-share/pixmaps/yupost128.png usr/share/pixmaps
-debian/yupost-qt.desktop usr/share/applications
-debian/yupost-qt.protocol usr/share/kde4/services/
