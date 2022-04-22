@@ -26,7 +26,7 @@
 #include <wallet/walletutil.h>
 #include <consensus/params.h>
 #include <pos.h>
-#include <yupostproject/yupostprojectdelegation.h>
+#include <yupost/yupostdelegation.h>
 
 #include <algorithm>
 #include <atomic>
@@ -1422,10 +1422,10 @@ public:
     /* Remove super staker entry from the wallet */
     bool RemoveSuperStakerEntry(const uint256& superStakerHash, bool fFlushOnClose=true);
 
-    /* Start staking yupostprojects */
+    /* Start staking yuposts */
     void StartStake(CConnman* connman = CWallet::defaultConnman);
 
-    /* Stop staking yupostprojects */
+    /* Stop staking yuposts */
     void StopStake();
 
     /* Is staking closing */

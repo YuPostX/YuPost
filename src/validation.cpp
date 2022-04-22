@@ -57,7 +57,7 @@
 #include <wallet/wallet.h>
 #include <util/convert.h>
 #include <util/signstr.h>
-#include <yupostproject/yupostprojectledger.h>
+#include <yupost/yupostledger.h>
 
 #include <algorithm>
 #include <string>
@@ -72,7 +72,7 @@
 #define MICRO 0.000001
 #define MILLI 0.001
 
- ////////////////////////////// yupostproject
+ ////////////////////////////// yupost
 #include <iostream>
 #include <bitset>
 #include "pubkey.h"
@@ -138,7 +138,7 @@ uint256 g_best_block;
 bool g_parallel_script_checks{false};
 std::atomic_bool fImporting(false);
 std::atomic_bool fReindex(false);
-bool fAddressIndex = false; // yupostproject
+bool fAddressIndex = false; // yupost
 bool fLogEvents = false;
 bool fHavePruned = false;
 bool fPruneMode = false;
@@ -732,7 +732,7 @@ bool MemPoolAccept::PreChecks(ATMPArgs& args, Workspace& ws)
 
     dev::u256 txMinGasPrice = 0;
 
-    //////////////////////////////////////////////////////////// // yupostproject
+    //////////////////////////////////////////////////////////// // yupost
     if(!CheckOpSender(tx, chainparams, GetSpendHeight(m_view))){
         return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-invalid-sender");
     }
@@ -742,9 +742,9 @@ bool MemPoolAccept::PreChecks(ATMPArgs& args, Workspace& ws)
             return state.Invalid(TxValidationResult::TX_INVALID_SENDER_SCRIPT, "bad-txns-invalid-sender-script");
         }
 
-        YuPostDGP yupostprojectDGP(globalState.get(), fGettingValuesDGP);
-        uint64_t minGasPrice = yupostprojectDGP.getMinGasPrice(::ChainActive().Tip()->nHeight + 1);
-        uint64_t blockGasLimit = yupostprojectDGP.getBlockGasLimit(::ChainActive().Tip()->nHeight + 1);
+        YuPostDGP yupostDGP(globalState.get(), fGettingValuesDGP);
+        uint64_t minGasPrice = yupostDGP.getMinGasPrice(::ChainActive().Tip()->nHeight + 1);
+        uint64_t blockGasLimit = yupostDGP.getBlockGasLimit(::ChainActive().Tip()->nHeight + 1);
         size_t count = 0;
         for(const CTxOut& o : tx.vout)
             count += o.scriptPubKey.HasOpCreate() || o.scriptPubKey.HasOpCall() ? 1 : 0;
@@ -754,13 +754,13 @@ bool MemPoolAccept::PreChecks(ATMPArgs& args, Workspace& ws)
         if(!converter.extractionYuPostTransactions(resultConverter)){
             return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-tx-bad-contract-format", "AcceptToMempool(): Contract transaction of the wrong format");
         }
-        std::vector<YuPostTransaction> yupostprojectTransactions = resultConverter.first;
-        std::vector<EthTransactionParams> yupostprojectETP = resultConverter.second;
+        std::vector<YuPostTransaction> yupostTransactions = resultConverter.first;
+        std::vector<EthTransactionParams> yupostETP = resultConverter.second;
 
         dev::u256 sumGas = dev::u256(0);
         dev::u256 gasAllTxs = dev::u256(0);
-        for(YuPostTransaction yupostprojectTransaction : yupostprojectTransactions){
-            sumGas += yupostprojectTransaction.gas() * yupostprojectTransaction.gasPrice();
+        for(YuPostTransaction yupostTransaction : yupostTransactions){
+            sumGas += yupostTransaction.gas() * yupostTransaction.gasPrice();
 
             if(sumGas > dev::u256(INT64_MAX)) {
                 return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-tx-gas-stipend-overflow", "AcceptToMempool(): Transaction's gas stipend overflows");
@@ -771,11 +771,11 @@ bool MemPoolAccept::PreChecks(ATMPArgs& args, Workspace& ws)
             }
 
             if(txMinGasPrice != 0) {
-                txMinGasPrice = std::min(txMinGasPrice, yupostprojectTransaction.gasPrice());
+                txMinGasPrice = std::min(txMinGasPrice, yupostTransaction.gasPrice());
             } else {
-                txMinGasPrice = yupostprojectTransaction.gasPrice();
+                txMinGasPrice = yupostTransaction.gasPrice();
             }
-            VersionVM v = yupostprojectTransaction.getVersion();
+            VersionVM v = yupostTransaction.getVersion();
             if(v.format!=0)
                 return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-tx-version-format", "AcceptToMempool(): Contract execution uses unknown version format");
             if(v.rootVM != 1)
@@ -786,29 +786,29 @@ bool MemPoolAccept::PreChecks(ATMPArgs& args, Workspace& ws)
                 return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-tx-version-flags", "AcceptToMempool(): Contract execution uses unknown flag options");
 
             //check gas limit is not less than minimum mempool gas limit
-            if(yupostprojectTransaction.gas() < gArgs.GetArg("-minmempoolgaslimit", MEMPOOL_MIN_GAS_LIMIT))
+            if(yupostTransaction.gas() < gArgs.GetArg("-minmempoolgaslimit", MEMPOOL_MIN_GAS_LIMIT))
                 return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-tx-too-little-mempool-gas", "AcceptToMempool(): Contract execution has lower gas limit than allowed to accept into mempool");
 
             //check gas limit is not less than minimum gas limit (unless it is a no-exec tx)
-            if(yupostprojectTransaction.gas() < MINIMUM_GAS_LIMIT && v.rootVM != 0)
+            if(yupostTransaction.gas() < MINIMUM_GAS_LIMIT && v.rootVM != 0)
                 return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-tx-too-little-gas", "AcceptToMempool(): Contract execution has lower gas limit than allowed");
 
-            if(yupostprojectTransaction.gas() > UINT32_MAX)
+            if(yupostTransaction.gas() > UINT32_MAX)
                 return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-tx-too-much-gas", "AcceptToMempool(): Contract execution can not specify greater gas limit than can fit in 32-bits");
 
-            gasAllTxs += yupostprojectTransaction.gas();
+            gasAllTxs += yupostTransaction.gas();
             if(gasAllTxs > dev::u256(blockGasLimit))
                 return state.Invalid(TxValidationResult::TX_GAS_EXCEEDS_LIMIT, "bad-txns-gas-exceeds-blockgaslimit");
 
             //don't allow less than DGP set minimum gas price to prevent MPoS greedy mining/spammers
-            if(v.rootVM!=0 && (uint64_t)yupostprojectTransaction.gasPrice() < minGasPrice)
+            if(v.rootVM!=0 && (uint64_t)yupostTransaction.gasPrice() < minGasPrice)
                 return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-tx-low-gas-price", "AcceptToMempool(): Contract execution has lower gas price than allowed");
         }
 
-        if(!CheckMinGasPrice(yupostprojectETP, minGasPrice))
+        if(!CheckMinGasPrice(yupostETP, minGasPrice))
             return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-small-gasprice");
 
-        if(count > yupostprojectTransactions.size())
+        if(count > yupostTransactions.size())
             return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-incorrect-format");
 
         if (rawTx && nAbsurdFee && dev::u256(nFees) > dev::u256(nAbsurdFee) + sumGas)
@@ -1135,7 +1135,7 @@ bool MemPoolAccept::Finalize(ATMPArgs& args, Workspace& ws)
     // - the transaction is not dependent on any other transactions in the mempool
     bool validForFeeEstimation = !fReplacementTransaction && !bypass_limits && IsCurrentForFeeEstimation() && m_pool.HasNoInputsOf(tx);
 
-    //////////////////////////////////////////////////////////////// // yupostproject
+    //////////////////////////////////////////////////////////////// // yupost
     // Add memory address index
     if (fAddressIndex)
     {
@@ -1954,7 +1954,7 @@ DisconnectResult CChainState::DisconnectBlock(const CBlock& block, const CBlockI
         return DISCONNECT_FAILED;
     }
 
-    /////////////////////////////////////////////////////////// // yupostproject
+    /////////////////////////////////////////////////////////// // yupost
     std::vector<std::pair<CAddressIndexKey, CAmount> > addressIndex;
     std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > addressUnspentIndex;
     ///////////////////////////////////////////////////////////
@@ -1979,7 +1979,7 @@ DisconnectResult CChainState::DisconnectBlock(const CBlock& block, const CBlockI
             }
         }
 
-        /////////////////////////////////////////////////////////// // yupostproject
+        /////////////////////////////////////////////////////////// // yupost
         if (pfClean == NULL && fAddressIndex) {
 
             for (unsigned int k = tx.vout.size(); k-- > 0;) {
@@ -2043,8 +2043,8 @@ DisconnectResult CChainState::DisconnectBlock(const CBlock& block, const CBlockI
     // move best block pointer to prevout block
     view.SetBestBlock(pindex->pprev->GetBlockHash());
 
-    globalState->setRoot(uintToh256(pindex->pprev->hashStateRoot)); // yupostproject
-    globalState->setRootUTXO(uintToh256(pindex->pprev->hashUTXORoot)); // yupostproject
+    globalState->setRoot(uintToh256(pindex->pprev->hashStateRoot)); // yupost
+    globalState->setRootUTXO(uintToh256(pindex->pprev->hashUTXORoot)); // yupost
 
     if(pfClean == NULL && fLogEvents){
         pstorageresult->deleteResults(block.vtx);
@@ -2060,7 +2060,7 @@ DisconnectResult CChainState::DisconnectBlock(const CBlock& block, const CBlockI
             pblocktree->EraseDelegateIndex(pindex->nHeight);
     }
 
-    //////////////////////////////////////////////////// // yupostproject
+    //////////////////////////////////////////////////// // yupost
     if (pfClean == NULL && fAddressIndex) {
         if (!pblocktree->EraseAddressIndex(addressIndex)) {
             error("Failed to delete address index");
@@ -2244,7 +2244,7 @@ static int64_t nTimeCallbacks = 0;
 static int64_t nTimeTotal = 0;
 static int64_t nBlocksTotal = 0;
 
-/////////////////////////////////////////////////////////////////////// yupostproject
+/////////////////////////////////////////////////////////////////////// yupost
 bool GetSpentCoinFromBlock(const CBlockIndex* pindex, COutPoint prevout, Coin* coin) {
     std::shared_ptr<CBlock> pblock = std::make_shared<CBlock>();
     CBlock& block = *pblock;
@@ -2404,8 +2404,8 @@ std::vector<ResultExecute> CallContract(const dev::Address& addrContract, std::v
     else
     	block.vtx.erase(block.vtx.begin()+1,block.vtx.end());
 
-    YuPostDGP yupostprojectDGP(globalState.get(), fGettingValuesDGP);
-    uint64_t blockGasLimit = yupostprojectDGP.getBlockGasLimit(::ChainActive().Tip()->nHeight + 1);
+    YuPostDGP yupostDGP(globalState.get(), fGettingValuesDGP);
+    uint64_t blockGasLimit = yupostDGP.getBlockGasLimit(::ChainActive().Tip()->nHeight + 1);
 
     if(gasLimit == 0){
         gasLimit = blockGasLimit - 1;
@@ -2607,12 +2607,12 @@ UniValue vmLogToJSON(const ResultExecute& execRes, const CTransaction& tx, const
 }
 
 void writeVMlog(const std::vector<ResultExecute>& res, const CTransaction& tx, const CBlock& block){
-    boost::filesystem::path yupostprojectDir = GetDataDir() / "vmExecLogs.json";
+    boost::filesystem::path yupostDir = GetDataDir() / "vmExecLogs.json";
     std::stringstream ss;
     if(fIsVMlogFile){
         ss << ",";
     } else {
-        std::ofstream file(yupostprojectDir.string(), std::ios::out | std::ios::app);
+        std::ofstream file(yupostDir.string(), std::ios::out | std::ios::app);
         file << "{\"logs\":[]}";
         file.close();
     }
@@ -2626,7 +2626,7 @@ void writeVMlog(const std::vector<ResultExecute>& res, const CTransaction& tx, c
         }
     }
     
-    std::ofstream file(yupostprojectDir.string(), std::ios::in | std::ios::out);
+    std::ofstream file(yupostDir.string(), std::ios::in | std::ios::out);
     file.seekp(-2, std::ios::end);
     file << ss.str();
     file.close();
@@ -2763,7 +2763,7 @@ dev::Address ByteCodeExec::EthAddrFromScript(const CScript& script){
     return dev::Address();
 }
 
-bool YuPostTxConverter::extractionYuPostTransactions(ExtractYuPostTX& yupostprojecttx){
+bool YuPostTxConverter::extractionYuPostTransactions(ExtractYuPostTX& yuposttx){
     // Get the address of the sender that pay the coins for the contract transactions
     refundSender = dev::Address(GetSenderAddress(txBit, view, blockTransactions));
 
@@ -2785,7 +2785,7 @@ bool YuPostTxConverter::extractionYuPostTransactions(ExtractYuPostTX& yupostproj
             }
         }
     }
-    yupostprojecttx = std::make_pair(resultTX, resultETP);
+    yuposttx = std::make_pair(resultTX, resultETP);
     return true;
 }
 
@@ -2922,12 +2922,12 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
     assert(*pindex->phashBlock == block.GetHash());
     int64_t nTimeStart = GetTimeMicros();
 
-    ///////////////////////////////////////////////// // yupostproject
-    YuPostDGP yupostprojectDGP(globalState.get(), fGettingValuesDGP);
-    globalSealEngine->setYuPostSchedule(yupostprojectDGP.getGasSchedule(pindex->nHeight + (pindex->nHeight+1 >= chainparams.GetConsensus().QIP7Height ? 0 : 1) ));
-    uint32_t sizeBlockDGP = yupostprojectDGP.getBlockSize(pindex->nHeight + (pindex->nHeight+1 >= chainparams.GetConsensus().QIP7Height ? 0 : 1));
-    uint64_t minGasPrice = yupostprojectDGP.getMinGasPrice(pindex->nHeight + (pindex->nHeight+1 >= chainparams.GetConsensus().QIP7Height ? 0 : 1));
-    uint64_t blockGasLimit = yupostprojectDGP.getBlockGasLimit(pindex->nHeight + (pindex->nHeight+1 >= chainparams.GetConsensus().QIP7Height ? 0 : 1));
+    ///////////////////////////////////////////////// // yupost
+    YuPostDGP yupostDGP(globalState.get(), fGettingValuesDGP);
+    globalSealEngine->setYuPostSchedule(yupostDGP.getGasSchedule(pindex->nHeight + (pindex->nHeight+1 >= chainparams.GetConsensus().QIP7Height ? 0 : 1) ));
+    uint32_t sizeBlockDGP = yupostDGP.getBlockSize(pindex->nHeight + (pindex->nHeight+1 >= chainparams.GetConsensus().QIP7Height ? 0 : 1));
+    uint64_t minGasPrice = yupostDGP.getMinGasPrice(pindex->nHeight + (pindex->nHeight+1 >= chainparams.GetConsensus().QIP7Height ? 0 : 1));
+    uint64_t blockGasLimit = yupostDGP.getBlockGasLimit(pindex->nHeight + (pindex->nHeight+1 >= chainparams.GetConsensus().QIP7Height ? 0 : 1));
     dgpMaxBlockSize = sizeBlockDGP ? sizeBlockDGP : dgpMaxBlockSize;
     updateBlockSizeParams(dgpMaxBlockSize);
     CBlock checkBlock(block.GetBlockHeader());
@@ -2941,7 +2941,7 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
 
 
     // Move this check from CheckBlock to ConnectBlock as it depends on DGP values
-    if (block.vtx.empty() || block.vtx.size() > dgpMaxBlockSize || ::GetSerializeSize(block, PROTOCOL_VERSION | SERIALIZE_TRANSACTION_NO_WITNESS) > dgpMaxBlockSize) // yupostproject
+    if (block.vtx.empty() || block.vtx.size() > dgpMaxBlockSize || ::GetSerializeSize(block, PROTOCOL_VERSION | SERIALIZE_TRANSACTION_NO_WITNESS) > dgpMaxBlockSize) // yupost
         return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-blk-length", "size limits failed");
 
     // Move this check from ContextualCheckBlock to ConnectBlock as it depends on DGP values
@@ -3147,7 +3147,7 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
     int64_t nSigOpsCost = 0;
     blockundo.vtxundo.reserve(block.vtx.size() - 1);
 
-    ///////////////////////////////////////////////////////// // yupostproject
+    ///////////////////////////////////////////////////////// // yupost
     std::vector<std::pair<CAddressIndexKey, CAmount> > addressIndex;
     std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > addressUnspentIndex;
     std::vector<std::pair<CSpentIndexKey, CSpentIndexValue> > spentIndex;
@@ -3206,7 +3206,7 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
                 return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-txns-nonfinal");
             }
 
-            ////////////////////////////////////////////////////////////////// // yupostproject
+            ////////////////////////////////////////////////////////////////// // yupost
             if (fAddressIndex)
             {
                 for (size_t j = 0; j < tx.vin.size(); j++) {
@@ -3282,7 +3282,7 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
             nValueOut += nTxValueOut;
         }
 
-///////////////////////////////////////////////////////////////////////////////////////// yupostproject
+///////////////////////////////////////////////////////////////////////////////////////// yupost
         if(!CheckOpSender(tx, chainparams, pindex->nHeight)){
             return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-txns-invalid-sender");
         }
@@ -3433,7 +3433,7 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
         }
 /////////////////////////////////////////////////////////////////////////////////////////
 
-        /////////////////////////////////////////////////////////////////////////////////// // yupostproject
+        /////////////////////////////////////////////////////////////////////////////////// // yupost
         if (fAddressIndex) {
 
             for (unsigned int k = 0; k < tx.vout.size(); k++) {
@@ -3479,7 +3479,7 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
     int64_t nTime4 = GetTimeMicros(); nTimeVerify += nTime4 - nTime2;
     LogPrint(BCLog::BENCH, "    - Verify %u txins: %.2fms (%.3fms/txin) [%.2fs (%.2fms/blk)]\n", nInputs - 1, MILLI * (nTime4 - nTime2), nInputs <= 1 ? 0 : MILLI * (nTime4 - nTime2) / (nInputs-1), nTimeVerify * MICRO, nTimeVerify * MILLI / nBlocksTotal);
 
-////////////////////////////////////////////////////////////////// // yupostproject
+////////////////////////////////////////////////////////////////// // yupost
     if(pindex->nHeight == chainparams.GetConsensus().nOfflineStakeHeight){
         globalState->deployDelegationsContract();
     }
@@ -3608,7 +3608,7 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
     }
 
     assert(pindex->phashBlock);
-    ///////////////////////////////////////////////////////////// // yupostproject
+    ///////////////////////////////////////////////////////////// // yupost
     if (fAddressIndex) {
         if (!pblocktree->WriteAddressIndex(addressIndex)) {
             return AbortNode(state, "Failed to write address index");
@@ -4033,8 +4033,8 @@ bool CChainState::ConnectTip(BlockValidationState& state, const CChainParams& ch
     {
         CCoinsViewCache view(&CoinsTip());
 
-        dev::h256 oldHashStateRoot(globalState->rootHash()); // yupostproject
-        dev::h256 oldHashUTXORoot(globalState->rootHashUTXO()); // yupostproject
+        dev::h256 oldHashStateRoot(globalState->rootHash()); // yupost
+        dev::h256 oldHashUTXORoot(globalState->rootHashUTXO()); // yupost
 
         bool rv = ConnectBlock(blockConnecting, state, pindexNew, view, chainparams);
         GetMainSignals().BlockChecked(blockConnecting, state);
@@ -4042,8 +4042,8 @@ bool CChainState::ConnectTip(BlockValidationState& state, const CChainParams& ch
             if (state.IsInvalid())
                 InvalidBlockFound(pindexNew, state);
 
-            globalState->setRoot(oldHashStateRoot); // yupostproject
-            globalState->setRootUTXO(oldHashUTXORoot); // yupostproject
+            globalState->setRoot(oldHashStateRoot); // yupost
+            globalState->setRootUTXO(oldHashUTXORoot); // yupost
             pstorageresult->clearCacheResult();
             return error("%s: ConnectBlock %s failed, %s", __func__, pindexNew->GetBlockHash().ToString(), state.ToString());
         }
@@ -5849,13 +5849,13 @@ bool TestBlockValidity(BlockValidationState& state, const CChainParams& chainpar
     if (!ContextualCheckBlock(block, state, chainparams.GetConsensus(), pindexPrev))
         return error("%s: Consensus::ContextualCheckBlock: %s", __func__, state.ToString());
 
-    dev::h256 oldHashStateRoot(globalState->rootHash()); // yupostproject
-    dev::h256 oldHashUTXORoot(globalState->rootHashUTXO()); // yupostproject
+    dev::h256 oldHashStateRoot(globalState->rootHash()); // yupost
+    dev::h256 oldHashUTXORoot(globalState->rootHashUTXO()); // yupost
     
     if (!::ChainstateActive().ConnectBlock(block, state, &indexDummy, viewNew, chainparams, true)){
         
-        globalState->setRoot(oldHashStateRoot); // yupostproject
-        globalState->setRootUTXO(oldHashUTXORoot); // yupostproject
+        globalState->setRoot(oldHashStateRoot); // yupost
+        globalState->setRootUTXO(oldHashUTXORoot); // yupost
         pstorageresult->clearCacheResult();
         return false;
     }
@@ -6190,7 +6190,7 @@ bool static LoadBlockIndexDB(const CChainParams& chainparams) EXCLUSIVE_LOCKS_RE
     pblocktree->ReadReindexing(fReindexing);
     if(fReindexing) fReindex = true;
 
-    ///////////////////////////////////////////////////////////// // yupostproject
+    ///////////////////////////////////////////////////////////// // yupost
     pblocktree->ReadFlag("addrindex", fAddressIndex);
     LogPrintf("LoadBlockIndexDB(): address index %s\n", fAddressIndex ? "enabled" : "disabled");
     /////////////////////////////////////////////////////////////
@@ -6257,10 +6257,10 @@ bool CVerifyDB::VerifyDB(const CChainParams& chainparams, CCoinsView *coinsview,
     BlockValidationState state;
     int reportDone = 0;
 
-////////////////////////////////////////////////////////////////////////// // yupostproject
+////////////////////////////////////////////////////////////////////////// // yupost
     dev::h256 oldHashStateRoot(globalState->rootHash());
     dev::h256 oldHashUTXORoot(globalState->rootHashUTXO());
-    YuPostDGP yupostprojectDGP(globalState.get(), fGettingValuesDGP);
+    YuPostDGP yupostDGP(globalState.get(), fGettingValuesDGP);
 //////////////////////////////////////////////////////////////////////////
 
     LogPrintf("[0%%]..."); /* Continued */
@@ -6281,8 +6281,8 @@ bool CVerifyDB::VerifyDB(const CChainParams& chainparams, CCoinsView *coinsview,
             break;
         }
 
-        ///////////////////////////////////////////////////////////////////// // yupostproject
-        uint32_t sizeBlockDGP = yupostprojectDGP.getBlockSize(pindex->nHeight);
+        ///////////////////////////////////////////////////////////////////// // yupost
+        uint32_t sizeBlockDGP = yupostDGP.getBlockSize(pindex->nHeight);
         dgpMaxBlockSize = sizeBlockDGP ? sizeBlockDGP : dgpMaxBlockSize;
         updateBlockSizeParams(dgpMaxBlockSize);
         /////////////////////////////////////////////////////////////////////
@@ -6344,20 +6344,20 @@ bool CVerifyDB::VerifyDB(const CChainParams& chainparams, CCoinsView *coinsview,
             if (!ReadBlockFromDisk(block, pindex, chainparams.GetConsensus()))
                 return error("VerifyDB(): *** ReadBlockFromDisk failed at %d, hash=%s", pindex->nHeight, pindex->GetBlockHash().ToString());
 
-            dev::h256 oldHashStateRoot(globalState->rootHash()); // yupostproject
-            dev::h256 oldHashUTXORoot(globalState->rootHashUTXO()); // yupostproject
+            dev::h256 oldHashStateRoot(globalState->rootHash()); // yupost
+            dev::h256 oldHashUTXORoot(globalState->rootHashUTXO()); // yupost
 
             if (!::ChainstateActive().ConnectBlock(block, state, pindex, coins, chainparams)){
 
-                globalState->setRoot(oldHashStateRoot); // yupostproject
-                globalState->setRootUTXO(oldHashUTXORoot); // yupostproject
+                globalState->setRoot(oldHashStateRoot); // yupost
+                globalState->setRootUTXO(oldHashUTXORoot); // yupost
                 pstorageresult->clearCacheResult();
                 return error("VerifyDB(): *** found unconnectable block at %d, hash=%s (%s)", pindex->nHeight, pindex->GetBlockHash().ToString(), state.ToString());
             }
         }
     } else {
-        globalState->setRoot(oldHashStateRoot); // yupostproject
-        globalState->setRootUTXO(oldHashUTXORoot); // yupostproject
+        globalState->setRoot(oldHashStateRoot); // yupost
+        globalState->setRootUTXO(oldHashUTXORoot); // yupost
     }
 
     LogPrintf("[DONE].\n");
@@ -6654,7 +6654,7 @@ bool LoadBlockIndex(const CChainParams& chainparams)
         // Use the provided setting for -logevents in the new database
         fLogEvents = gArgs.GetBoolArg("-logevents", DEFAULT_LOGEVENTS);
         pblocktree->WriteFlag("logevents", fLogEvents);
-        /////////////////////////////////////////////////////////////// // yupostproject
+        /////////////////////////////////////////////////////////////// // yupost
         fAddressIndex = gArgs.GetBoolArg("-addrindex", DEFAULT_ADDRINDEX);
         pblocktree->WriteFlag("addrindex", fAddressIndex);
         ///////////////////////////////////////////////////////////////
@@ -7269,7 +7269,7 @@ public:
 };
 static CMainCleanup instance_of_cmaincleanup;
 
-////////////////////////////////////////////////////////////////////////////////// // yupostproject
+////////////////////////////////////////////////////////////////////////////////// // yupost
 bool GetAddressIndex(uint256 addressHash, int type, std::vector<std::pair<CAddressIndexKey, CAmount> > &addressIndex, int start, int end)
 {
     if (!fAddressIndex)

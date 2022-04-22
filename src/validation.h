@@ -33,16 +33,16 @@
 
 #include <consensus/consensus.h>
 
-/////////////////////////////////////////// yupostproject
+/////////////////////////////////////////// yupost
 class CWalletTx;
 
-#include <yupostproject/yupostprojectstate.h>
-#include <yupostproject/yupostprojectDGP.h>
+#include <yupost/yupoststate.h>
+#include <yupost/yupostDGP.h>
 #include <libethereum/ChainParams.h>
 #include <libethereum/LastBlockHashesFace.h>
 #include <libethashseal/GenesisInfo.h>
 #include <script/standard.h>
-#include <yupostproject/storageresults.h>
+#include <yupost/storageresults.h>
 
 
 extern std::unique_ptr<YuPostState> globalState;
@@ -169,7 +169,7 @@ static const uint64_t DEFAULT_GAS_LIMIT_OP_SEND=250000;
 static const CAmount DEFAULT_GAS_PRICE=0.00000040*COIN;
 static const CAmount MAX_RPC_GAS_PRICE=0.00000100*COIN;
 
-static const size_t MAX_CONTRACT_VOUTS = 1000; // yupostproject
+static const size_t MAX_CONTRACT_VOUTS = 1000; // yupost
 
 //! -stakingminutxovalue default
 static const CAmount DEFAULT_STAKING_MIN_UTXO_VALUE = 100 * COIN;
@@ -420,7 +420,7 @@ public:
 /** Initializes the script-execution cache */
 void InitScriptExecutionCache();
 
-///////////////////////////////////////////////////////////////// // yupostproject
+///////////////////////////////////////////////////////////////// // yupost
 bool GetAddressIndex(uint256 addressHash, int type,
                      std::vector<std::pair<CAddressIndexKey, CAmount> > &addressIndex,
                      int start = 0, int end = 0);
@@ -493,7 +493,7 @@ bool CheckReward(const CBlock& block, BlockValidationState& state, int nHeight, 
 
 bool RemoveStateBlockIndex(CBlockIndex *pindex);
 
-//////////////////////////////////////////////////////// yupostproject
+//////////////////////////////////////////////////////// yupost
 bool GetSpentCoinFromBlock(const CBlockIndex* pindex, COutPoint prevout, Coin* coin);
 
 bool GetSpentCoinFromMainChain(const CBlockIndex* pforkPrev, COutPoint prevoutStake, Coin* coin);
@@ -541,7 +541,7 @@ public:
 
     YuPostTxConverter(CTransaction tx, CCoinsViewCache* v = NULL, const std::vector<CTransactionRef>* blockTxs = NULL, unsigned int flags = SCRIPT_EXEC_BYTE_CODE) : txBit(tx), view(v), blockTransactions(blockTxs), sender(false), nFlags(flags){}
 
-    bool extractionYuPostTransactions(ExtractYuPostTX& yupostprojectTx);
+    bool extractionYuPostTransactions(ExtractYuPostTX& yupostTx);
 
 private:
 

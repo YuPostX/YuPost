@@ -9,9 +9,9 @@
 #include <pubkey.h>
 #include <script/script.h>
 
-#include <yupostproject/yupostprojectstate.h>
-#include <yupostproject/yupostprojectDGP.h>
-#include <yupostproject/yupostprojecttransaction.h>
+#include <yupost/yupoststate.h>
+#include <yupost/yupostDGP.h>
+#include <yupost/yuposttransaction.h>
 #include <validation.h>
 #include <streams.h>
 
@@ -199,7 +199,7 @@ txnouttype Solver(const CScript& scriptPubKey, std::vector<std::vector<unsigned 
                 else
                     break;
             }
-            /////////////////////////////////////////////////////////// yupostproject
+            /////////////////////////////////////////////////////////// yupost
             else if (opcode2 == OP_VERSION)
             {
                 if(0 <= opcode1 && opcode1 <= OP_PUSHDATA4)

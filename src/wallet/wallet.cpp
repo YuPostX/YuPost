@@ -31,7 +31,7 @@
 #include <wallet/coincontrol.h>
 #include <wallet/fees.h>
 #include <miner.h>
-#include <yupostproject/yupostprojectledger.h>
+#include <yupost/yupostledger.h>
 
 #include <algorithm>
 #include <assert.h>
