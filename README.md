@@ -1,67 +1,7 @@
 What is YuPost?
 -------------
 
-YuPost is a decentralized blockchain project built on Bitcoin's UTXO model, with support for Ethereum Virtual Machine based smart contracts, and secured by a proof of stake consensus model. It achieves this through the revolutionary Account Abstraction Layer which allows the EVM to communicate with YuPost's Bitcoin-like UTXO blockchain. For more general information about YuPost as well as links to join our community, go to https://yupost.org
-
-Welcome to the YuPost Ignition Main Network. This is the main network where the tokens hold value and should be guarded very carefully. If you are testing the network, or developing unstable software on YuPost, we highly recommend using either testnet or regtest mode. 
-
-The major features of the YuPost network include:
-
-1. Compatibility with the Ethereum Virtual Machine, which allows for compatibility with most existing Solidity based smart contracts. No special solidity compiler is required to deploy your smart contract to YuPost. 
-2. A Proof of Stake consensus system which is optimized for YuPost's contract model. Any user can stake and help to secure the network. There is no voting, master nodes, or minimum amount required. There have been transactions as small as 2 YuPost that have created blocks in the past. Staking from smart contracts is under development.
-3. The Decentralized Governance Protocol is completely implemented and functional, which allows certain network parameters to be modified without a fork or other network disruption. This currently controls parameters like block size, gas prices, etc. 
-4. Uses the UTXO transaction model and is compatible with Bitcoin, allowing for existing tooling and workflows to be used with YuPost. This allows for the infamous SPV protocol to be used which is ideal for light wallets on mobile phones and IoT devices.
-
-Note: YuPost Core is considered beta software. We make no warranties or guarantees of its security or stability.
-
-YuPost Documentation and Usage Resources
----------------
-
-These are some resources that might be helpful in understanding YuPost.
-
-Basic usage resources:
-
-* [User guide](https://docs.yupost.site/en/)
-* [YuPost-Qt Wallet Tutorial](https://github.com/yupost/documents/tree/master/en/YuPost-Wallet-Tutorial#yupost-qt-wallet-tutorial)
-* [YuPost staking tutorial](https://github.com/yupost/documents/tree/master/en/How-to-Stake-with-YuPost)
-* [YuPost tutorial on Raspberry Pi](https://github.com/yupost/documents/tree/master/en/YuPost-on-Raspberry-Pi)
-* [Running YuPost on Amazon AWS using YuPost AMI](https://github.com/yupost/documents/tree/master/en/YuPost-AWS)
-* [Encrypting and unlocking wallet](https://github.com/yupost/documents/tree/master/en/Encrypt-and-Unlock-YuPost-Wallet)
-* [Testnet guide](https://github.com/yupost/documents/blob/master/en/Testnet-User-Guide.md)
-* [Block explorer](https://yupost.info), [Older explorer](https://explorer.yupost.org)
-
-
-Development resources:
-
-* [YuPost Book - A Developer's Guide To YPO](http://book.yupost.site/en/)
-* [YuPost contract usage](https://docs.yupost.site/en/QRC20-Token-Introduce.html)
-* [Deploying a custom token to YuPost](https://blog.yupost.org/yupost-custom-token-walkthrough-467d725fa27d)
-* [YuPostJS document](https://yupost.github.io/yupostjs-doc/)
-* [Smart contract ICO example](http://book.yupost.site/en/part3/ico.htm)
-* [Early example faucet contract](http://earlz.net/view/2017/06/30/2144/the-yupost-sparknet-faucet)
-
-General Info about YuPost:
-
-* [CIRCLERESEARCH YuPost Primer](https://www.circle.com/marketing/pdfs/research/circle-research-yupost.pdf)
-* [YuPost's PoS vs CASPER](https://www.reddit.com/r/YuPost/comments/788oa5/yuposts_pos_vs_casper_and_the_nothingatstake_problem/)
-* [Technical article explaining YuPost's PoS model in depth](http://earlz.net/view/2017/07/27/1904/the-missing-explanation-of-proof-of-stake-version)
-
-
-Developer's Tools
------------------
-
-* Smart contract deployment tool
-  * https://github.com/yupost/solar
-* DApp JavaScript Library
-  * https://github.com/yupost/yupostjs
-* A toolkit for building yupost light wallets
-  * https://github.com/yupost/yupostjs-wallet
-* CORS yupostd RPC proxy for DApp
-  * https://github.com/yupost/yupostportal
-* Docker images for running yupost services
-  * https://github.com/yupost/yupost-docker
-* yupost.info API that powers the block explorer and the YPO Web wallet
-  * https://github.com/yupost/yupostinfo-api#yupostinfo-api-documentation
+YuPost is a decentralized postal network based on Qtum blockchain (https://www.qtum.org).
 
 
 What is YuPost Core?
