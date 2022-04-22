@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=0.17.6
+Name=YuPost Core
+Comment=Connect to the YuPost P2P Network
+Exec=yupost-qt %u
+Terminal=false
+Type=Application
+Icon=yupost128
+MimeType=x-scheme-handler/yupost;
+Categories=Network;
+StartupWMClass=YuPost-qt
+Name[en_US]=yupost-qt
