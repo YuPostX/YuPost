@@ -42,7 +42,7 @@ QString BitcoinUnits::longName(int unit)
     {
     case BTC: return QString("YPO");
     case mBTC: return QString("mYPO");
-    case uBTC: return QString::fromUtf8("μYPO (bits)");
+    case uBTC: return QString::fromUtf8("μYPO");
     case SAT: return QString("nYPO");
     default: return QString("???");
     }
@@ -52,8 +52,8 @@ QString BitcoinUnits::shortName(int unit)
 {
     switch(unit)
     {
-    case uBTC: return QString::fromUtf8("bits");
-    case SAT: return QString("sat");
+    case uBTC: return QString::fromUtf8("μYPO");
+    case SAT: return QString("nYPO");
     default: return longName(unit);
     }
 }
