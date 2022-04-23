@@ -162,7 +162,7 @@ public:
         pchMessageStart[1] = 0xbf;
         pchMessageStart[2] = 0xd6;
         pchMessageStart[3] = 0xc3;
-        nDefaultPort = 3888;
+        nDefaultPort = 5777;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 14;
         m_assumed_chain_state_size = 1;
@@ -179,10 +179,9 @@ public:
         // This is fine at runtime as we'll fall back to using them as a oneshot if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        vSeeds.emplace_back("yupost3.yupost.net"); // YuPost mainnet
-        vSeeds.emplace_back("yupost5.yupost.net"); // YuPost mainnet
-        vSeeds.emplace_back("yupost6.yupost.net"); // YuPost mainnet
-        vSeeds.emplace_back("yupost7.yupost.net"); // YuPost mainnet
+        vSeeds.emplace_back("yuseed1.yupost.xyz"); // YuPost mainnet
+        vSeeds.emplace_back("yuseed2.yupost.xyz"); // YuPost mainnet
+        
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,78);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,50);
@@ -291,7 +290,7 @@ public:
         pchMessageStart[1] = 0xd2;
         pchMessageStart[2] = 0xf5;
         pchMessageStart[3] = 0x36;
-        nDefaultPort = 13888;
+        nDefaultPort = 15777;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 6;
         m_assumed_chain_state_size = 1;
@@ -306,7 +305,8 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("yupost4.yupost.net"); // YuPost testnet
+        vSeeds.emplace_back("yuseedtest1.yupost.xyz"); // YuPost testnet
+        vSeeds.emplace_back("yuseedtest2.yupost.xyz"); // YuPost testnet
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,140);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,110);
@@ -413,7 +413,7 @@ public:
         pchMessageStart[1] = 0xdd;
         pchMessageStart[2] = 0xc6;
         pchMessageStart[3] = 0xe1;
-        nDefaultPort = 23888;
+        nDefaultPort = 25777;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 0;
         m_assumed_chain_state_size = 0;

@@ -114,7 +114,7 @@ void init_mnt4_params()
 
     /* choice of short Weierstrass curve and its twist */
     mnt4_G1::coeff_a = mnt4_Fq("2");
-    mnt4_G1::coeff_b = mnt4_Fq("423894536526684178289416011533888240029318103673896002803341544124054745019340795360841685");
+    mnt4_G1::coeff_b = mnt4_Fq("423894536526684178289416011535777240029318103673896002803341544124054745019340795360841685");
     mnt4_twist = mnt4_Fq2(mnt4_Fq::zero(), mnt4_Fq::one());
     mnt4_twist_coeff_a = mnt4_Fq2(mnt4_G1::coeff_a * mnt4_Fq2::non_residue, mnt4_Fq::zero());
     mnt4_twist_coeff_b = mnt4_Fq2(mnt4_Fq::zero(), mnt4_G1::coeff_b * mnt4_Fq2::non_residue);
