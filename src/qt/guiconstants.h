@@ -47,7 +47,7 @@ static const int TOOLTIP_WRAP_THRESHOLD = 80;
 #define SPINNER_FRAMES 36
 
 #define QAPP_ORG_NAME "YuPost"
-#define QAPP_ORG_DOMAIN "yupost.org"
+#define QAPP_ORG_DOMAIN "yupost.xyz"
 #define QAPP_APP_NAME_DEFAULT "YuPost-Qt"
 #define QAPP_APP_NAME_TESTNET "YuPost-Qt-testnet"
 #define QAPP_APP_NAME_REGTEST "YuPost-Qt-regtest"
