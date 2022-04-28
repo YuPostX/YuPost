@@ -1,7 +1,7 @@
 What is YuPost?
 -------------
 
-YuPost is a decentralized postal network based on Qtum blockchain (https://www.qtum.org).
+YuPost is a decentralized postal network based on Qtum blockchain.
 
 
 What is YuPost Core?
