@@ -65,6 +65,6 @@ static constexpr int DEFAULT_PRUNE_TARGET_GB{2};
 #define YPO_INFO_TESTNET "<a href='https://testnet.yupost.info/%1/%2'>%2</a>"
 
 /* Hardware wallet interface uri */
-#define YPO_HWI_TOOL "<a href='https://github.com/yupostproject/HWI/tags'>HWI Tool</a>"
+#define YPO_HWI_TOOL "<a href='https://github.com/YuPostX/HWI/tags'>HWI Tool</a>"
 
 #endif // BITCOIN_QT_GUICONSTANTS_H

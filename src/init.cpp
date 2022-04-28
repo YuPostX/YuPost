@@ -634,7 +634,7 @@ void SetupServerArgs()
 
 std::string LicenseInfo()
 {
-    const std::string URL_SOURCE_CODE = "<https://github.com/yupostproject/yupost>";
+    const std::string URL_SOURCE_CODE = "<https://github.com/YuPostX/yupost>";
 
     return CopyrightHolders(strprintf(_("Copyright (C) %i").translated, COPYRIGHT_YEAR) + " ") + "\n" +
            "\n" +

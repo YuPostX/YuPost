@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#define YPO_RELEASES "https://github.com/yupostproject/yupost/releases"
+#define YPO_RELEASES "https://github.com/YuPostX/yupost/releases"
 
 class Version {
 
